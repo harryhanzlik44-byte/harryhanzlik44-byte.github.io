@@ -14,7 +14,7 @@
     body {
       font-family: 'Inter', sans-serif;
       background: #fff;
-      color: #1c3035;
+      color: #000;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -61,7 +61,7 @@
       letter-spacing: -1.8px;
       line-height: 1;
       white-space: nowrap;
-      color: #1c3035;
+      color: #000;
     }
     .menu-btn {
       background: none; border: none; cursor: pointer; padding: 6px;
@@ -194,7 +194,7 @@
       font-size: clamp(34px, 6.5vw, 82px);
       font-weight: 600;
       line-height: 1;
-      color: #1c3035;
+      color: #000;
       letter-spacing: -2px;
     }
     .hero-subtitle {
@@ -226,7 +226,7 @@
     .section-body {
       font-size: clamp(16px, 2.34vw, 30px);
       font-weight: 500;
-      color: #1c3035;
+      color: #000;
       letter-spacing: -0.9px;
       line-height: 1.2;
     }
@@ -272,7 +272,7 @@
       justify-content: flex-end;
       font-size: clamp(14px, 1.56vw, 20px);
       font-weight: 400;
-      color: #1c3035;
+      color: #000;
       opacity: 0.55;
       margin-top: clamp(20px, 3vw, 40px);
       margin-bottom: clamp(10px, 1.4vw, 18px);
@@ -302,7 +302,7 @@
       font-size: clamp(12px, 1.1vw, 14px);
       font-weight: 600;
       letter-spacing: 0.2px;
-      color: #1c3035;
+      color: #000;
     }
     .palette-label span:first-child { min-width: 70px; }
     .palette-label .hex { opacity: 0.55; font-weight: 500; }
@@ -338,20 +338,20 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: clamp(24px, 4vw, 60px);
-      align-items: center;
+      align-items: start;
     }
     .media-row img { width: 100%; height: auto; display: block; }
     .media-row .media-text { display: flex; flex-direction: column; gap: 14px; }
     .media-sub-heading {
       font-size: clamp(18px, 2vw, 26px);
       font-weight: 700;
-      color: #1c3035;
+      color: #000;
       letter-spacing: -0.7px;
     }
     .media-text p {
       font-size: clamp(15px, 1.6vw, 21px);
       font-weight: 500;
-      color: #1c3035;
+      color: #000;
       letter-spacing: -0.5px;
       line-height: 1.45;
       text-align: justify;
@@ -385,7 +385,7 @@
       font-size: clamp(16px, 1.7vw, 22px);
       font-weight: 700;
       letter-spacing: 0.3px;
-      color: #1c3035;
+      color: #000;
       margin-bottom: clamp(16px, 2vw, 26px);
     }
     .compare-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
@@ -395,7 +395,7 @@
       gap: 18px;
       font-size: clamp(14px, 1.45vw, 18px);
       font-weight: 500;
-      color: #1c3035;
+      color: #000;
       line-height: 1.3;
     }
     .ico {
@@ -422,7 +422,7 @@
       align-items: center;
       justify-content: center;
       background: #f5f5f5;
-      color: #1c3035;
+      color: #000;
       font-size: 16px;
       font-weight: 500;
       letter-spacing: -0.64px;
@@ -453,14 +453,14 @@
       font-weight: 500;
       letter-spacing: -0.9px;
       white-space: nowrap;
-      color: #1c3035;
+      color: #000;
     }
     .btn-more {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       background: #f5f5f5;
-      color: #1c3035;
+      color: #000;
       font-size: 16px;
       font-weight: 500;
       letter-spacing: -0.64px;
@@ -482,6 +482,8 @@
     .next-card:hover { box-shadow: 0 22px 48px rgba(0,0,0,0.3); transform: translateY(-5px); }
     .next-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1); }
     .next-card:hover img { transform: scale(1.05); }
+    .next-grid .next-card:first-child img { transform: scale(1.18); transform-origin: 50% 0; }
+    .next-grid .next-card:first-child:hover img { transform: scale(1.24); transform-origin: 50% 0; }
     .next-card .card-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%);
@@ -693,7 +695,7 @@
         <div class="layout-stacked reveal">
           <div class="section-text">
             <h2 class="section-heading">Úvod</h2>
-            <div class="section-body" style="max-width: 846px;">
+            <div class="section-body" style="max-width: 846px; text-align: justify;">
               <p>Všechno začalo dohodou na kompletním redesignu Robinových stávajících stránek. Robinův profesní růst natolik předehnal jeho původní web, že stávající prezentace začala jeho podnikání spíše brzdit. Naším cílem bylo vytvořit digitální identitu, která bude odpovídat expertovi 21. století.</p>
             </div>
           </div>
