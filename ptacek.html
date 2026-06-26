@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Výživa Ptáček – Případová studie — Jan Hanzlík</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #1c3035;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Keyframes ─── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 0.55; }
+      50%       { transform: scale(1.4); opacity: 0.2; }
+    }
+
+    /* ─── Header ─── */
+    .header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 1000;
+      height: 93px;
+      padding: 0 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid #f5f5f5;
+      animation: fadeDown 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .logo {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -1.8px;
+      line-height: 1;
+      white-space: nowrap;
+      color: #1c3035;
+    }
+    .menu-btn {
+      background: none; border: none; cursor: pointer; padding: 6px;
+      display: grid;
+      grid-template-columns: 5px 5px;
+      grid-template-rows: 5px 5px;
+      gap: 8px;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .menu-btn:hover { transform: rotate(90deg); }
+    .menu-btn span { display: block; width: 5px; height: 5px; background: #1c3035; }
+
+    /* ─── Nav Overlay ─── */
+    .nav-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-overlay.open { pointer-events: auto; opacity: 1; }
+    .nav-overlay a {
+      color: #000;
+      font-size: clamp(38px, 6vw, 68px); font-weight: 600; letter-spacing: -2.5px;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+    }
+    .nav-overlay.open a { opacity: 1; transform: translateY(0); }
+    .nav-overlay.open a:nth-child(2) { transition-delay: 0.06s; }
+    .nav-overlay.open a:nth-child(3) { transition-delay: 0.13s; }
+    .nav-overlay.open a:nth-child(4) { transition-delay: 0.20s; }
+    .nav-overlay a:hover { color: rgba(0,0,0,0.35); }
+    .nav-close {
+      position: absolute; top: 30px; right: 36px;
+      background: none; border: none; cursor: pointer;
+      width: 18px; height: 18px;
+      display: grid; grid-template-columns: 5px 5px; grid-template-rows: 5px 5px; gap: 8px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-close:hover { transform: rotate(90deg); }
+    .nav-close span { display: block; width: 5px; height: 5px; background: #1c3035; }
+
+    /* ─── Main ─── */
+    main { padding-top: 93px; }
+
+    /* ─── Page wrapper ─── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 0 70px; }
+
+    /* ─── Hero ─── */
+    .hero-section {
+      padding: 0 70px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Meta info (right-aligned) */
+    .meta-info {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 20px;
+      padding-bottom: 40px;
+      animation: fadeIn 0.7s ease 0.3s both;
+    }
+    .meta-table {
+      display: flex;
+      gap: 20px;
+      font-size: clamp(14px, 1.56vw, 20px);
+      font-weight: 400;
+      line-height: 1;
+    }
+    .meta-labels { display: flex; flex-direction: column; gap: 20px; opacity: 0.6; }
+    .meta-values { display: flex; flex-direction: column; gap: 20px; }
+
+    /* Back to work link */
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px 24px;
+      padding-top: 22px;
+    }
+    .hero-top .meta-info { padding-top: 0; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(14px, 1.56vw, 20px);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: normal;
+      color: #000;
+      transition: color 0.25s ease;
+      animation: fadeIn 0.7s ease 0.3s both;
+    }
+    .back-link svg {
+      width: 18px; height: 18px;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .back-link:hover { color: rgba(0,0,0,0.35); }
+    .back-link:hover svg { transform: translateX(-4px); }
+
+    /* Hero row: image + title */
+    .hero-row {
+      display: flex;
+      gap: clamp(20px, 2.7vw, 35px);
+      align-items: flex-start;
+      margin-bottom: clamp(40px, 6.25vw, 80px);
+      animation: fadeUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    }
+    .hero-img-wrap {
+      flex-shrink: 0;
+      width: clamp(200px, 47.7vw, 611px);
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 10px 10px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .hero-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-self: stretch;
+      padding-top: clamp(8px, 1.5vw, 20px);
+    }
+    .hero-title {
+      font-size: clamp(34px, 6.5vw, 82px);
+      font-weight: 600;
+      line-height: 1;
+      color: #1c3035;
+      letter-spacing: -2px;
+    }
+    .hero-subtitle {
+      font-size: clamp(18px, 2.5vw, 32px);
+      font-weight: 500;
+      color: #be430e;
+      letter-spacing: -0.9px;
+      margin-top: clamp(24px, 4vw, 48px);
+    }
+
+    /* ─── Content sections ─── */
+    .content-sections {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(60px, 7.8vw, 100px);
+      padding-bottom: clamp(15px, 2vw, 25px);
+    }
+
+    /* Shared section styles */
+    .section-heading {
+      font-size: clamp(20px, 2.34vw, 30px);
+      font-weight: 700;
+      color: #be430e;
+      letter-spacing: -0.9px;
+      line-height: 36px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .section-body {
+      font-size: clamp(16px, 2.34vw, 30px);
+      font-weight: 500;
+      color: #1c3035;
+      letter-spacing: -0.9px;
+      line-height: 1.2;
+    }
+    .section-body p + p { margin-top: 0.8em; }
+
+    /* Layout A: heading + text stacked */
+    .layout-stacked .section-text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1140px;
+    }
+
+    /* Layout B: heading beside text — CSS Grid */
+    .layout-side {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: clamp(40px, 7.5vw, 96px);
+      row-gap: clamp(16px, 2.3vw, 30px);
+      align-items: start;
+    }
+    .layout-side .section-text { display: contents; }
+    .layout-side .section-body { text-align: justify; }
+    .layout-side .section-image,
+    .layout-side .img-duo,
+    .layout-side .palette,
+    .layout-side .media-block { grid-column: 1 / -1; }
+    .layout-side .extra-text { grid-column: 2; margin-top: 0; }
+
+    /* Section image */
+    .section-image {
+      margin-top: clamp(16px, 2.3vw, 30px);
+    }
+    .section-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Caption above an image (right aligned) */
+    .img-caption {
+      display: flex;
+      justify-content: flex-end;
+      font-size: clamp(14px, 1.56vw, 20px);
+      font-weight: 400;
+      color: #1c3035;
+      opacity: 0.55;
+      margin-top: clamp(20px, 3vw, 40px);
+      margin-bottom: clamp(10px, 1.4vw, 18px);
+    }
+
+    /* Two images side by side */
+    .img-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(16px, 2.3vw, 30px);
+      margin-top: clamp(16px, 2.3vw, 30px);
+    }
+    .img-duo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Color palette (brand) */
+    .palette {
+      margin-top: clamp(24px, 3.5vw, 50px);
+      max-width: 860px;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(20px, 2.6vw, 34px);
+    }
+    .palette-group { display: flex; flex-direction: column; gap: 10px; }
+    .palette-label {
+      display: flex;
+      gap: 32px;
+      font-size: clamp(12px, 1.1vw, 14px);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      color: #1c3035;
+    }
+    .palette-label span:first-child { min-width: 70px; }
+    .palette-label .hex { opacity: 0.55; font-weight: 500; }
+    .palette-primary {
+      background: #1c3035;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .palette-primary span {
+      font-size: clamp(13px, 1.25vw, 15px);
+      font-weight: 500;
+      color: #eee0d3;
+    }
+    .palette-secondary {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: clamp(8px, 1vw, 12px);
+    }
+    .palette-secondary div {
+      height: clamp(72px, 8vw, 90px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(13px, 1.25vw, 15px);
+      font-weight: 500;
+    }
+
+    /* Media row: image + text side by side */
+    .media-block { margin-top: clamp(30px, 4.7vw, 60px); display: flex; flex-direction: column; gap: clamp(30px, 4.7vw, 60px); }
+    .media-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 4vw, 60px);
+      align-items: center;
+    }
+    .media-row img { width: 100%; height: auto; display: block; }
+    .media-row .media-text { display: flex; flex-direction: column; gap: 14px; }
+    .media-sub-heading {
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 700;
+      color: #1c3035;
+      letter-spacing: -0.7px;
+    }
+    .media-text p {
+      font-size: clamp(15px, 1.6vw, 21px);
+      font-weight: 500;
+      color: #1c3035;
+      letter-spacing: -0.5px;
+      line-height: 1.45;
+      text-align: justify;
+    }
+    .media-text p + p { margin-top: 0.7em; }
+    /* text-only principle block */
+    .media-note {
+      max-width: 560px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    /* ─── Mockup gallery (full bleed) ─── */
+    .mockup-section {
+      padding: clamp(30px, 4vw, 50px) 0 clamp(60px, 7.8vw, 100px);
+    }
+    .mockup-section .page { display: flex; flex-direction: column; gap: clamp(24px, 3vw, 40px); }
+    .mockup-full img { width: 100%; height: auto; }
+
+    /* ─── Comparison (before/after) ─── */
+    .compare-section {
+      padding: clamp(20px, 3vw, 40px) 70px clamp(60px, 7.8vw, 100px);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(30px, 6vw, 90px);
+    }
+    .compare-title {
+      font-size: clamp(16px, 1.7vw, 22px);
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: #1c3035;
+      margin-bottom: clamp(16px, 2vw, 26px);
+    }
+    .compare-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+    .compare-list li {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: clamp(14px, 1.45vw, 18px);
+      font-weight: 500;
+      color: #1c3035;
+      line-height: 1.3;
+    }
+    .ico {
+      flex-shrink: 0;
+      width: 24px; height: 24px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .ico-x { border: 1.5px solid #be430e; color: #be430e; }
+    .ico-check { background: #2e8b41; color: #fff; }
+    .compare-cta {
+      display: flex;
+      justify-content: center;
+      margin-top: clamp(40px, 5vw, 64px);
+    }
+
+    /* "Chci vidět" button (light pill) */
+    .btn-prototype {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+      color: #1c3035;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.64px;
+      padding: 15px 26px;
+      transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ─── Next studies section ─── */
+    .next-section {
+      padding: clamp(60px, 7.8vw, 100px) 70px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .next-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(20px, 2.6vw, 40px);
+    }
+    .next-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: clamp(24px, 3.5vw, 45px);
+      gap: 20px;
+    }
+    .next-title {
+      font-size: clamp(24px, 3.125vw, 40px);
+      font-weight: 500;
+      letter-spacing: -0.9px;
+      white-space: nowrap;
+      color: #1c3035;
+    }
+    .btn-more {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+      color: #1c3035;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.64px;
+      padding: 15px 26px;
+      white-space: nowrap;
+      transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .next-card {
+      display: block;
+      position: relative;
+      width: clamp(260px, 35vw, 450px);
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      box-shadow: 0 10px 10px rgba(0,0,0,0.25);
+      cursor: pointer;
+      transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .next-card:hover { box-shadow: 0 22px 48px rgba(0,0,0,0.3); transform: translateY(-5px); }
+    .next-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1); }
+    .next-card:hover img { transform: scale(1.05); }
+    .next-card .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: clamp(16px, 2.5vw, 32px);
+      opacity: 0; transition: opacity 0.38s ease;
+    }
+    .next-card:hover .card-overlay { opacity: 1; }
+    .card-name {
+      font-size: clamp(18px, 2.2vw, 28px); font-weight: 600; color: #fff; letter-spacing: -0.8px;
+      transform: translateY(14px); transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-type {
+      font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.72); margin-top: 4px;
+      transform: translateY(14px); transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.04s;
+    }
+    .next-card:hover .card-name,
+    .next-card:hover .card-type { transform: translateY(0); }
+
+    /* ─── Footer ─── */
+    footer {
+      background: #000;
+      padding: 80px 80px 64px;
+    }
+    .footer-top { display: flex; justify-content: flex-end; margin-bottom: 80px; }
+    .footer-linkedin {
+      font-size: 16px; font-weight: 500; color: #fff; letter-spacing: -0.31px; line-height: 24px;
+      transition: opacity 0.22s;
+    }
+    .footer-linkedin:hover { opacity: 0.55; }
+    .footer-body { max-width: 926px; display: flex; flex-direction: column; gap: 40px; }
+    .footer-heading {
+      font-size: clamp(22px, 3.75vw, 48px); font-weight: 500; line-height: 1.25; letter-spacing: 0.35px;
+      background: linear-gradient(90deg, #ffffff 0%, #4a5565 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 40px; }
+    .btn-talk {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 64px; padding: 0 32px;
+      background: #fff; color: #000;
+      font-size: 16px; font-weight: 500; letter-spacing: -0.31px; white-space: nowrap;
+      transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-prototype:hover,
+    .btn-more:hover,
+    .btn-talk:hover { background: #e8e8e8; transform: translateY(-2px); }
+    .availability { display: flex; align-items: center; gap: 16px; color: #fff; font-size: 16px; font-weight: 400; letter-spacing: -0.31px; }
+    .dot-wrap { position: relative; width: 10px; height: 10px; flex-shrink: 0; }
+    .dot-core { position: absolute; inset: 0; background: #fff; border-radius: 50%; }
+    .dot-pulse { position: absolute; inset: -9.6px; background: rgba(255,255,255,0.55); border-radius: 50%; animation: pulseDot 2.2s ease-in-out infinite; }
+    .footer-contacts { display: flex; flex-direction: column; gap: 8px; }
+    .footer-contacts a {
+      font-size: 16px; font-weight: 400; color: #fff; letter-spacing: -0.31px; line-height: 24px;
+      text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); text-underline-offset: 3px;
+      transition: text-decoration-color 0.22s, opacity 0.22s;
+    }
+    .footer-contacts a:hover { text-decoration-color: #fff; opacity: 0.75; }
+
+    /* ─── Scroll reveal ─── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .hero-section, .compare-section, .next-section { padding-left: 40px; padding-right: 40px; }
+      .page { padding: 0 40px; }
+      footer { padding: 60px 40px 52px; }
+    }
+
+    @media (max-width: 768px) {
+      .header { height: 80px; padding: 0 24px; }
+      main { padding-top: 80px; }
+      .hero-section, .compare-section, .next-section { padding-left: 24px; padding-right: 24px; }
+      .page { padding: 0 24px; }
+      .meta-info { justify-content: flex-start; padding-bottom: 24px; }
+      .hero-row { flex-direction: column; }
+      .hero-img-wrap { width: 100%; max-width: 480px; }
+      .hero-text { padding-top: 24px; }
+      .layout-side { grid-template-columns: 1fr; }
+      .layout-side .extra-text { grid-column: 1; }
+      .section-heading { white-space: normal; }
+      .img-duo { grid-template-columns: 1fr; }
+      .media-row { grid-template-columns: 1fr; }
+      .media-row.reverse .media-text { order: -1; }
+      .palette-secondary { grid-template-columns: 1fr; }
+      .compare-grid { grid-template-columns: 1fr; gap: 36px; }
+      footer { margin-top: 0; padding: 50px 24px 44px; }
+      .footer-top { margin-bottom: 40px; }
+      .footer-body { max-width: 100%; }
+      .next-card { width: 100%; max-width: 450px; }
+    }
+
+    @media (max-width: 480px) {
+      .logo { font-size: 22px; letter-spacing: -1.2px; }
+      .hero-section, .compare-section, .next-section { padding-left: 16px; padding-right: 16px; }
+      .page { padding: 0 16px; }
+      footer { padding: 40px 16px 36px; }
+      .btn-talk { height: 52px; padding: 0 22px; font-size: 15px; }
+      .footer-actions { gap: 24px; }
+      .next-header { flex-direction: column; align-items: flex-start; }
+    }
+  
+    /* a11y audit fixes: touch targets (>=44px) + focus-visible ring */
+    .menu-btn { position: relative; }
+    .menu-btn::before, .nav-close::before { content: ''; position: absolute; inset: -13px; }
+    a:focus-visible,
+    button:focus-visible,
+    .back-link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  
+    /* ===== Custom cursor (dot + ring, auto-invert via blend) ===== */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none; }
+      .cursor-dot, .cursor-ring {
+        position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000;
+        border-radius: 50%; mix-blend-mode: difference; will-change: transform;
+        opacity: 0; transition: opacity 0.3s ease;
+      }
+      .cursor-dot {
+        width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff;
+        transition: opacity 0.3s ease, transform 0.18s ease;
+      }
+      .cursor-ring {
+        width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 1.5px solid #fff;
+        transition: opacity 0.3s ease, width 0.25s ease, height 0.25s ease, margin 0.25s ease;
+      }
+      .cursor-ring.is-hovering { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+      .cursor-dot.is-hovering { transform: scale(0); }
+      .cursor-ready .cursor-dot, .cursor-ready .cursor-ring { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="header">
+    <a href="index.html" class="logo">JAN HANZLÍK</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Otevřít menu" aria-expanded="false">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ═══ Nav Overlay ═══ -->
+  <nav class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <button class="nav-close" id="navClose" aria-label="Zavřít menu">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+    <a href="moje-prace.html">Práce</a>
+    <a href="o-mne.html">O mně</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+
+  <main>
+
+    <!-- ═══ Hero ═══ -->
+    <section class="hero-section">
+
+      <div class="hero-top">
+        <a href="moje-prace.html" class="back-link" aria-label="Zpět na moji práci">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Zpět na seznam prací
+        </a>
+        <!-- Meta: right side -->
+        <div class="meta-info">
+        <div class="meta-table">
+          <div class="meta-labels">
+            <span>ODVĚTVÍ</span>
+            <span>KLIENT</span>
+            <span>ROK</span>
+          </div>
+          <div class="meta-values">
+            <span>UX/UI DESIGN, BRAND DESIGN</span>
+            <span>VÝŽIVA PTÁČEK s.r.o.</span>
+            <span>2026</span>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Hero: image + title -->
+      <div class="hero-row">
+        <div class="hero-img-wrap">
+          <img
+            src="images/pt-hero.jpg"
+            alt="Výživa Ptáček – redesign webu, hero mockup"
+            loading="eager"
+          />
+        </div>
+        <div class="hero-text">
+          <h1 class="hero-title">REDESIGN VÝŽIVOVÉHO PORADENSTVÍ PTÁČEK</h1>
+          <p class="hero-subtitle">Od hobby webu k digitální autoritě</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Content sections ═══ -->
+    <div class="page">
+      <div class="content-sections">
+
+        <!-- Úvod -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Úvod</h2>
+            <div class="section-body" style="max-width: 846px;">
+              <p>Všechno začalo dohodou na kompletním redesignu Robinových stávajících stránek. Robinův profesní růst natolik předehnal jeho původní web, že stávající prezentace začala jeho podnikání spíše brzdit. Naším cílem bylo vytvořit digitální identitu, která bude odpovídat expertovi 21. století.</p>
+            </div>
+          </div>
+          <div class="img-caption reveal reveal-delay-1">Robinův předchozí web</div>
+          <div class="section-image reveal reveal-delay-1" style="margin-top: 0;">
+            <img loading="lazy" src="images/pt-prevweb.jpg" alt="Robinův předchozí web – screenshot" />
+          </div>
+        </div>
+
+        <!-- Fáze 1 -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Fáze 1 – Objevování a strategie</h2>
+            <div class="section-body" style="text-align: justify;">
+              <p>Celý proces odstartovala hloubková konzultace, během které jsme definovali obchodní cíle, misi a především Robinova ideálního klienta. Zjistili jsme, že jím není profesionální sportovec, ale vytížený člověk hledající řád a energii. Tato strategická fáze byla klíčová, protože nám umožnila zcela opustit agresivní fitness klišé a postavit celou budoucí komunikaci na klidu, srozumitelnosti a vědecké racionalitě.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fáze 2 -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Fáze 2 – Dospělá vizuální identita</h2>
+            <div class="section-body" style="text-align: justify;">
+              <p>S jasnou strategií v zádech jsme jako první krok vytvořili kompletní vizuální identitu a brand manuál, který se záměrně distancuje od oborových stereotypů. Naším cílem bylo vyhnout se „bio“ zelené barvě a motivům listů či salátů. Navrhli jsme moderní, minimalistické logo, kde ikonický symbol ptáčka plynule přechází do tvaru vidličky, čímž vznikl svébytný symbol moderní výživy.</p>
+            </div>
+          </div>
+          <div class="img-duo reveal reveal-delay-1">
+            <img loading="lazy" src="images/pt-ig1.jpg" alt="Vizitka Ptáček – brand mockup" />
+            <img loading="lazy" src="images/pt-screen1.jpg" alt="Logo Ptáček – prezentace identity" />
+          </div>
+          <div class="section-body reveal reveal-delay-1" style="text-align: justify; margin-top: clamp(16px,2.3vw,30px);">
+            <p>Pro značku jsme definovali zemitou paletu postavenou na Temné břidlici a Mandlové, které evokují stabilitu a lidskost. Dynamiku a odkaz na sport jsme do manuálu vložili skrze akcenty Pálené mědi a Terakoty. Celý vizuální systém jsme ukotvili v sebevědomé typografii Montserrat a Inter. Tento radikální odklon od klišé okamžitě oddělil Robina od masy amatérských poradců a definoval ho jako dospělého a důvěryhodného partnera ještě předtím, než padl první pixel webu.</p>
+          </div>
+          <div class="palette reveal reveal-delay-2">
+            <div class="palette-group">
+              <div class="palette-label"><span>Primary</span><span class="hex">#1C3035</span></div>
+              <div class="palette-primary">
+                <span>Exaktní</span>
+                <span>Stabilní</span>
+                <span>Sebevědomá</span>
+                <span>Racionální</span>
+              </div>
+            </div>
+            <div class="palette-group">
+              <div class="palette-label"><span>Secondary</span><span class="hex">#BE430E</span><span class="hex">#CD7451</span><span class="hex">#EEE0D3</span></div>
+              <div class="palette-secondary">
+                <div style="background:#be430e; color:#eee0d3;">Energická</div>
+                <div style="background:#cd7451; color:#fff;">Vitální</div>
+                <div style="background:#eee0d3; color:#1c3035;">Organická</div>
+              </div>
+            </div>
+          </div>
+          <div class="section-image reveal reveal-delay-2">
+            <img loading="lazy" src="images/pt-logos.png" alt="Logo Ptáček – varianty na barevných pozadích" />
+          </div>
+        </div>
+
+        <!-- Fáze 3 -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Fáze 3 – Logika designu</h2>
+            <div class="section-body" style="text-align: justify;">
+              <p>Než začnu řešit vizuál, musím mít postavenou funkční kostru. Nejdřív jsem vytvořil informační architekturu, abychom dali všem textům a službám jasný řád. Tuto „mapu“ jsem následně načrtl na papír do prvních wireframů a ty pak převedl do interaktivního low-fidelity prototypu v Google Stitch. Díky tomu jsme si mohli hned na začátku otestovat celou uživatelskou cestu a ujistit se, že rezervace konzultace je na webu maximálně intuitivní.</p>
+            </div>
+          </div>
+          <div class="img-duo reveal reveal-delay-1">
+            <img loading="lazy" src="images/pt-photo1.jpg" alt="Informační architektura – ruční náčrt" />
+            <img loading="lazy" src="images/pt-screen2.jpg" alt="Wireframy klíčových stránek webu" />
+          </div>
+
+          <div class="media-block">
+            <div class="section-body reveal" style="text-align: justify; max-width: 1140px;">
+              <p>Při návrhu obsahu webu jsme následně aplikovali brandovou identitu na unikátní storytelling, který propojuje tři Robinovy světy: exaktní vědu, vrcholový sport a hlubokou empatii. Do centra webové prezentace jsme umístili Robinův osobní příběh boje s váhou během pandemie. Tato volba nebyla náhodná – odhalená frustrace zbourala bariéru „nedostupného poradce“, zatímco následná cesta zpět podložená vzděláním, certifikáty a praxí vybudovala nezpochybnitelnou autoritu. Z poradenství se tak na webu stalo skutečné partnerství.</p>
+            </div>
+            <div class="img-duo reveal reveal-delay-1" style="margin-top: 0;">
+              <img loading="lazy" src="images/pt-screen3.jpg" alt="Sekce Moje filozofie a Vzdělání a odbornost" />
+              <img loading="lazy" src="images/pt-screen4.jpg" alt="Sekce Proč dělám to, co dělám – příběh" />
+            </div>
+
+            <!-- Skvělý design + foto -->
+            <div class="media-row reveal">
+              <img loading="lazy" src="images/pt-photo2.jpg" alt="Nové focení Robina pro web" />
+              <div class="media-text">
+                <p>Skvělý design by nefungoval bez kvalitních podkladů. Zorganizovali jsme proto zcela nové focení, aby vizuál konečně ladil s novou, dospělejší tváří značky. Snímky jsem pak upravil a detailně ořezal tak, aby perfektně zapadly do tmavého rozhraní webu. S novými fotografiemi šel návrh webu hladce. Cílem však nebylo vytvořit pouze pěknou vizitku, ale funkční nástroj, který vysvětluje, buduje autoritu a prodává.</p>
+              </div>
+            </div>
+
+            <!-- Navádění k akci (text only) -->
+            <div class="media-note reveal">
+              <h3 class="media-sub-heading">Navádění k akci (CTA):</h3>
+              <div class="media-text">
+                <p>Celý web je postavený na promyšlené uživatelské cestě. Strategicky rozmístěná a jasná CTA tlačítka uživatele nenechávají tápat, ale logicky ho vedou k jedinému cíli: sjednání konzultace.</p>
+              </div>
+            </div>
+
+            <!-- Social Proof + screenshot -->
+            <div class="media-row reveal">
+              <img loading="lazy" src="images/pt-screen5.jpg" alt="Sekce recenzí a transformací klientů" />
+              <div class="media-text">
+                <h3 class="media-sub-heading">Social Proof jako hlavní pilíř:</h3>
+                <p>Výživa je nesmírně citlivé téma, kde rozhoduje důvěra. Službu jsme proto detailně vysvětlili a podpořili reálnými důkazy. Navrhl jsem výrazné sekce s autentickými recenzemi a vizuálně čisté karty s transformacemi klientů. Z pohledu UX pro mě bylo klíčové doladit jejich responzivitu a interakci – na desktopu se dodatečné informace zobrazují plynule pomocí hover efektu (po přejetí myší), zatímco na mobilu a tabletu jsem karty přetvořil do intuitivního slideru přizpůsobeného pro swipování.</p>
+              </div>
+            </div>
+
+            <!-- Bento + screenshot (image right) -->
+            <div class="media-row reverse reveal">
+              <div class="media-text">
+                <h3 class="media-sub-heading">Bento design pro přednášky:</h3>
+                <p>Robin se nevěnuje jen 1-on-1 poradenství, ale i přednáškám. Tuto sekci jsem zpracoval do moderního bento gridu. Nabízí rychlý, vizuálně atraktivní přehled jeho aktivit, který je pro okamžité zvýšení kredibility podpořený logy organizací, se kterými již spolupracoval.</p>
+              </div>
+              <img loading="lazy" src="images/pt-screen6.jpg" alt="Bento grid sekce přednášek" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Fáze 4 -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Fáze 4 – Ostrý vizuál</h2>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ Mockup gallery (full bleed) ═══ -->
+    <section class="mockup-section">
+      <div class="page">
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal1.jpg" alt="Ptáček – mockup webu 1" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal2.jpg" alt="Ptáček – mockup na MacBooku (tmavá verze)" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal3.jpg" alt="Ptáček – mockup na Mac Studiu (světlá verze)" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal4.jpg" alt="Ptáček – mockup na iPad Mini" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal5.jpg" alt="Ptáček – mockup na Dell monitoru" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal6.jpg" alt="Ptáček – mockup na MacBooku Pro" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal7.jpg" alt="Ptáček – mockup na MacBooku Pro na stole" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal8.jpg" alt="Ptáček – mockup stránky 404" /></div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal9.jpg" alt="Ptáček – mockup detailu webu" /></div>
+      </div>
+    </section>
+
+    <!-- ═══ Porovnání: Původní web vs Nový redesign ═══ -->
+    <section class="compare-section">
+      <div class="compare-grid">
+        <div class="reveal">
+          <h3 class="compare-title">PŮVODNÍ WEB</h3>
+          <ul class="compare-list compare-list--old">
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>žádná jednotná vizuální identita</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>generické obrázky</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>uživatel neví jak služba probíhá, co má od Robina čekat</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>aby se uživatel objednal, musí vyplnit dotazník</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>generické reference, bez autentičnosti a storytellingu</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>plochý vizuál</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>velmi málo informací o Robinovi</li>
+          </ul>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <h3 class="compare-title">NOVÝ REDESIGN</h3>
+          <ul class="compare-list compare-list--new">
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>jednotná moderní vizuální identita</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>reálné fotky podporující storytelling</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>detailní popis Robinovy služby</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>propojený rezervační systém</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>skutečné příběhy proměn Robinových klientů</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>moderní vizuál s jasnou hierarchií</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>detailní popis Robinova příběhu a zkušeností</li>
+          </ul>
+        </div>
+      </div>
+      <div class="compare-cta reveal reveal-delay-1">
+        <a href="https://vyzivaptacek.cz/" class="btn-prototype" target="_blank" rel="noopener">Navštívit web</a>
+      </div>
+    </section>
+
+    <!-- ═══ Další případové studie ═══ -->
+    <section class="next-section">
+      <div class="next-header reveal">
+        <h2 class="next-title">Další případové studie</h2>
+        <a href="moje-prace.html" class="btn-more">Zobrazit více</a>
+      </div>
+      <div class="next-grid">
+        <a class="next-card reveal reveal-delay-1" href="saunia.html">
+          <img loading="lazy" src="images/prace-card-saunia.png" alt="Saunia – případová studie" />
+          <div class="card-overlay" aria-hidden="true">
+            <div class="card-name">Saunia</div>
+            <div class="card-type">UX/UI Design · Případová studie</div>
+          </div>
+        </a>
+        <a class="next-card reveal reveal-delay-2" href="ht-travel.html">
+          <img loading="lazy" src="images/ht-hero.jpg" alt="HT Travel – případová studie" />
+          <div class="card-overlay" aria-hidden="true">
+            <div class="card-name">HT Travel</div>
+            <div class="card-type">Web Design · 48h sprint · Případová studie</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ Footer ═══ -->
+  <footer>
+    <div class="footer-top">
+      <a href="https://www.linkedin.com/in/jan-hanzlík-035748288" target="_blank" rel="noopener noreferrer" class="footer-linkedin">LinkedIn</a>
+    </div>
+    <div class="footer-body">
+      <h2 class="footer-heading reveal">
+        Zajímá vás, jak bych zapadl do vašeho týmu? Ozvěte se mi a pojďme probrat, na čem můžeme společně pracovat.
+      </h2>
+      <div class="footer-actions reveal reveal-delay-1">
+        <a href="mailto:harry.hanzlik44@gmail.com" class="btn-talk">Pojďme si promluvit</a>
+        <div class="availability">
+          <div class="dot-wrap" aria-hidden="true">
+            <div class="dot-pulse"></div>
+            <div class="dot-core"></div>
+          </div>
+          <span>Připravený na nové výzvy</span>
+        </div>
+      </div>
+      <div class="footer-contacts reveal reveal-delay-2">
+        <a href="tel:+420777504871">+420 777 504 871</a>
+        <a href="mailto:harry.hanzlik44@gmail.com">harry.hanzlik44@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══ Scripts ═══ -->
+  <script>
+    /* ── Menu toggle ── */
+    const menuBtn    = document.getElementById('menuBtn');
+    const navOverlay = document.getElementById('navOverlay');
+    const navClose   = document.getElementById('navClose');
+
+    function openNav() {
+      navOverlay.classList.add('open');
+      navOverlay.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeNav() {
+      navOverlay.classList.remove('open');
+      navOverlay.setAttribute('aria-hidden', 'true');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    menuBtn.addEventListener('click', openNav);
+    navClose.addEventListener('click', closeNav);
+    navOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && navOverlay.classList.contains('open')) closeNav();
+    });
+
+    /* ── Scroll reveal ── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ── Header shrink on scroll ── */
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.style.padding = window.scrollY > 20 ? '0 36px' : '';
+    }, { passive: true });
+  </script>
+
+
+  <script>
+  (function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var dot = document.createElement('div'); dot.className = 'cursor-dot';
+    var ring = document.createElement('div'); ring.className = 'cursor-ring';
+    document.body.appendChild(dot); document.body.appendChild(ring);
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hoverSel = 'a, button, .back-link, [role="button"], input[type="submit"], .submit-btn, label';
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my, ready = false;
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+      if (!ready) { ready = true; rx = mx; ry = my; document.documentElement.classList.add('cursor-ready'); }
+      var hov = e.target.closest ? e.target.closest(hoverSel) : null;
+      ring.classList.toggle('is-hovering', !!hov);
+      dot.classList.toggle('is-hovering', !!hov);
+    }, { passive: true });
+    function loop() {
+      var k = reduce ? 1 : 0.18;
+      rx += (mx - rx) * k; ry += (my - ry) * k;
+      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    document.addEventListener('mouseleave', function () { document.documentElement.classList.remove('cursor-ready'); });
+    document.addEventListener('mouseenter', function () { if (ready) document.documentElement.classList.add('cursor-ready'); });
+  })();
+  </script>
+</body>
+</html>

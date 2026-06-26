@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice" role="img" aria-label="HT Travel">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#241a14"/>
+      <stop offset="100%" stop-color="#120d0a"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="800" fill="url(#g)"/>
+  <g fill="none" stroke="#C45B3C" opacity="0.35" stroke-width="2">
+    <circle cx="400" cy="330" r="150"/>
+    <ellipse cx="400" cy="330" rx="60" ry="150"/>
+    <ellipse cx="400" cy="330" rx="120" ry="150"/>
+    <line x1="250" y1="330" x2="550" y2="330"/>
+    <line x1="400" y1="180" x2="400" y2="480"/>
+  </g>
+  <g stroke="#E8DDD2" stroke-width="3" fill="none" opacity="0.85" transform="translate(400 330)">
+    <circle r="26"/>
+    <path d="M -10 10 L 4 -14 L 14 -2 L 0 22 Z" fill="#C45B3C" stroke="none"/>
+  </g>
+  <text x="400" y="600" fill="#E8DDD2" font-family="Inter, Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="2" text-anchor="middle">HT TRAVEL</text>
+  <text x="400" y="650" fill="#9C8F82" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="500" letter-spacing="3" text-anchor="middle">CESTOVATELSKÝ DENÍK</text>
+</svg>

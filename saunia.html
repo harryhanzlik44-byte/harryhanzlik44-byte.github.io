@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saunia – Případová studie — Jan Hanzlík</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fff;
+      color: #000;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ─── Keyframes ─── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 0.55; }
+      50%       { transform: scale(1.4); opacity: 0.2; }
+    }
+
+    /* ─── Header ─── */
+    .header {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 1000;
+      height: 93px;
+      padding: 0 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid #f5f5f5;
+      animation: fadeDown 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .logo {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: -1.8px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .menu-btn {
+      background: none; border: none; cursor: pointer; padding: 6px;
+      display: grid;
+      grid-template-columns: 5px 5px;
+      grid-template-rows: 5px 5px;
+      gap: 8px;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .menu-btn:hover { transform: rotate(90deg); }
+    .menu-btn span { display: block; width: 5px; height: 5px; background: #000; }
+
+    /* ─── Nav Overlay ─── */
+    .nav-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-overlay.open { pointer-events: auto; opacity: 1; }
+    .nav-overlay a {
+      font-size: clamp(38px, 6vw, 68px); font-weight: 600; letter-spacing: -2.5px;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+    }
+    .nav-overlay.open a { opacity: 1; transform: translateY(0); }
+    .nav-overlay.open a:nth-child(2) { transition-delay: 0.06s; }
+    .nav-overlay.open a:nth-child(3) { transition-delay: 0.13s; }
+    .nav-overlay.open a:nth-child(4) { transition-delay: 0.20s; }
+    .nav-overlay a:hover { color: rgba(0,0,0,0.35); }
+    .nav-close {
+      position: absolute; top: 30px; right: 36px;
+      background: none; border: none; cursor: pointer;
+      width: 18px; height: 18px;
+      display: grid; grid-template-columns: 5px 5px; grid-template-rows: 5px 5px; gap: 8px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-close:hover { transform: rotate(90deg); }
+    .nav-close span { display: block; width: 5px; height: 5px; background: #000; }
+
+    /* ─── Main ─── */
+    main { padding-top: 93px; }
+
+    /* ─── Page wrapper ─── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 0 70px; }
+
+    /* ─── Hero ─── */
+    .hero-section {
+      padding: 0 70px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* Meta info (right-aligned) */
+    .meta-info {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 20px;
+      padding-bottom: 40px;
+      animation: fadeIn 0.7s ease 0.3s both;
+    }
+    .meta-table {
+      display: flex;
+      gap: 20px;
+      font-size: clamp(14px, 1.56vw, 20px);
+      font-weight: 400;
+      line-height: 1;
+    }
+    .meta-labels { display: flex; flex-direction: column; gap: 20px; opacity: 0.6; }
+    .meta-values { display: flex; flex-direction: column; gap: 20px; }
+
+    /* Back to work link */
+    .hero-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px 24px;
+      padding-top: 22px;
+    }
+    .hero-top .meta-info { padding-top: 0; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(14px, 1.56vw, 20px);
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: normal;
+      color: #000;
+      transition: color 0.25s ease;
+      animation: fadeIn 0.7s ease 0.3s both;
+    }
+    .back-link svg {
+      width: 18px; height: 18px;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .back-link:hover { color: rgba(0,0,0,0.35); }
+    .back-link:hover svg { transform: translateX(-4px); }
+
+    /* Hero row: image + title */
+    .hero-row {
+      display: flex;
+      gap: clamp(20px, 2.7vw, 35px);
+      align-items: flex-start;
+      margin-bottom: clamp(40px, 6.25vw, 80px);
+      animation: fadeUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+    }
+    .hero-img-wrap {
+      flex-shrink: 0;
+      width: clamp(200px, 47.7vw, 611px);
+      aspect-ratio: 1 / 1;
+      box-shadow: 0 10px 10px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .hero-img-wrap img {
+      width: 160.52%; height: 107.71%;
+      max-width: none;
+      object-fit: cover;
+      margin-left: -30.24%; margin-top: -5.23%;
+    }
+    .hero-title {
+      font-size: clamp(36px, 7.8vw, 100px);
+      font-weight: 600;
+      line-height: 1;
+      color: #000;
+      letter-spacing: -2px;
+      padding-top: clamp(8px, 1.5vw, 20px);
+    }
+
+    /* ─── Content sections ─── */
+    .content-sections {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(60px, 7.8vw, 100px);
+      padding-bottom: clamp(15px, 2vw, 25px);
+    }
+
+    /* Shared section styles */
+    .section-heading {
+      font-size: clamp(20px, 2.34vw, 30px);
+      font-weight: 700;
+      color: #4f2130;
+      letter-spacing: -0.9px;
+      line-height: 36px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .section-body {
+      font-size: clamp(16px, 2.34vw, 30px);
+      font-weight: 500;
+      color: #000;
+      letter-spacing: -0.9px;
+      line-height: 1.2;
+    }
+    .section-body p + p { margin-top: 0.8em; }
+
+    /* Layout A: heading + text in one column (stacked) */
+    .layout-stacked .section-text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1140px;
+    }
+
+    /* Layout B: heading beside text (side by side) — CSS Grid */
+    .layout-side {
+      display: grid;
+      grid-template-columns: max-content 1fr;
+      column-gap: clamp(40px, 7.5vw, 96px);
+      row-gap: clamp(16px, 2.3vw, 30px);
+      align-items: start;
+    }
+    .layout-side .section-text { display: contents; }
+    .layout-side .section-body { text-align: justify; }
+    .layout-side .section-image,
+    .layout-side .quotes { grid-column: 1 / -1; }
+    .layout-side .extra-text { grid-column: 2; margin-top: 0; }
+    .layout-side .extra-text--left  { grid-column: 1 / -1; grid-row: auto; max-width: 65%; }
+    .layout-side .extra-text--right { grid-column: 1 / -1; grid-row: auto; max-width: 52%; margin-left: auto; }
+
+    /* Section image */
+    .section-image {
+      margin-top: clamp(16px, 2.3vw, 30px);
+    }
+    .section-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .section-image.bordered img {
+      border: 1px solid #000;
+    }
+
+    /* Two images side by side */
+    .img-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(16px, 2.3vw, 30px);
+      margin-top: clamp(16px, 2.3vw, 30px);
+    }
+    .img-duo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-duo .bordered { border: 1px solid #000; }
+
+    /* Wireframe duo (different proportions) */
+    .img-wireframe {
+      display: grid;
+      grid-template-columns: 484fr 571fr;
+      gap: clamp(20px, 5.9vw, 75px);
+      margin-top: clamp(30px, 4.7vw, 60px);
+    }
+    .img-wireframe img { width: 100%; height: auto; display: block; }
+    .img-wireframe .bordered { border: 1px solid #000; }
+
+    /* Quotes block */
+    .quotes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(20px, 4vw, 100px);
+      margin-top: clamp(40px, 6.9vw, 88px);
+      align-items: start;
+    }
+    .quote-text {
+      font-size: clamp(14px, 2.73vw, 35px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.9px;
+      color: #000;
+    }
+
+    /* Visual design extra text blocks */
+    .extra-text {
+      font-size: clamp(16px, 2.34vw, 30px);
+      font-weight: 500;
+      color: #000;
+      letter-spacing: -0.9px;
+      line-height: 1.2;
+      text-align: justify;
+      max-width: 838px;
+      margin-top: clamp(16px, 2.3vw, 30px);
+    }
+    .extra-text p + p { margin-top: 0.8em; }
+    .extra-text.align-right { align-self: flex-end; }
+
+    /* ─── Mockup section ─── */
+    .mockup-section {
+      padding: 0 0 clamp(60px, 7.8vw, 100px);
+    }
+    .mockup-section .page { display: flex; flex-direction: column; gap: clamp(30px, 4.7vw, 60px); }
+    .mockup-full img { width: 100%; height: auto; }
+    .mockup-duo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(16px, 2.3vw, 30px);
+    }
+    .mockup-duo img { width: 100%; height: auto; }
+
+    /* ─── Result section ─── */
+    .result-section {
+      padding: 0 70px;
+      max-width: 1280px;
+      margin: 0 auto clamp(60px, 7.8vw, 100px);
+    }
+    .result-section .layout-stacked .section-text { max-width: 974px; }
+
+    /* ─── Before/After section ─── */
+    .before-after-section {
+      padding: 0 70px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .before-after-grid {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(30px, 4.7vw, 60px);
+      margin-top: clamp(20px, 2.3vw, 30px);
+    }
+    .before-after-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(20px, 4.5vw, 57px);
+    }
+    .before-after-row img { width: 100%; height: auto; display: block; }
+
+    /* Hand mockup */
+    .hand-section {
+      margin: clamp(60px, 8.6vw, 110px) 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: clamp(30px, 4.7vw, 60px);
+    }
+    .btn-prototype { align-self: center; }
+    .hand-img-wrap {
+      width: 100%;
+      overflow: hidden;
+    }
+    .hand-img-wrap img {
+      width: 139.87%;
+      max-width: none;
+      margin-left: -22.43%;
+      margin-top: -13.95%;
+      margin-bottom: -13.95%;
+    }
+    .design-system-img {
+      max-width: 1139px;
+      width: 100%;
+    }
+    .design-system-img img { width: 100%; height: auto; }
+
+    /* "Chci vidět prototyp" button */
+    .btn-prototype {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+      color: #000;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.64px;
+      padding: 15px 26px;
+      transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      align-self: center;
+    }
+
+    /* ─── Next studies section ─── */
+    .next-section {
+      padding: clamp(60px, 7.8vw, 100px) 70px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .next-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(20px, 2.6vw, 40px);
+    }
+    .next-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: clamp(24px, 3.5vw, 45px);
+      gap: 20px;
+    }
+    .next-title {
+      font-size: clamp(24px, 3.125vw, 40px);
+      font-weight: 500;
+      letter-spacing: -0.9px;
+      white-space: nowrap;
+    }
+    .btn-more {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f5f5;
+      color: #000;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.64px;
+      padding: 15px 26px;
+      white-space: nowrap;
+      transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .next-card {
+      display: block;
+      position: relative;
+      width: clamp(260px, 35vw, 450px);
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      box-shadow: 0 10px 10px rgba(0,0,0,0.25);
+      cursor: pointer;
+      transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .next-card:hover { box-shadow: 0 22px 48px rgba(0,0,0,0.3); transform: translateY(-5px); }
+    .next-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1); }
+    .next-card:hover img { transform: scale(1.05); }
+    .next-card .card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: clamp(16px, 2.5vw, 32px);
+      opacity: 0; transition: opacity 0.38s ease;
+    }
+    .next-card:hover .card-overlay { opacity: 1; }
+    .card-name {
+      font-size: clamp(18px, 2.2vw, 28px); font-weight: 600; color: #fff; letter-spacing: -0.8px;
+      transform: translateY(14px); transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-type {
+      font-size: 14px; font-weight: 400; color: rgba(255,255,255,0.72); margin-top: 4px;
+      transform: translateY(14px); transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.04s;
+    }
+    .next-card:hover .card-name,
+    .next-card:hover .card-type { transform: translateY(0); }
+
+    /* ─── Footer ─── */
+    footer {
+      background: #000;
+      padding: 80px 80px 64px;
+    }
+    .footer-top { display: flex; justify-content: flex-end; margin-bottom: 80px; }
+    .footer-linkedin {
+      font-size: 16px; font-weight: 500; color: #fff; letter-spacing: -0.31px; line-height: 24px;
+      transition: opacity 0.22s;
+    }
+    .footer-linkedin:hover { opacity: 0.55; }
+    .footer-body { max-width: 926px; display: flex; flex-direction: column; gap: 40px; }
+    .footer-heading {
+      font-size: clamp(22px, 3.75vw, 48px); font-weight: 500; line-height: 1.25; letter-spacing: 0.35px;
+      background: linear-gradient(90deg, #ffffff 0%, #4a5565 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .footer-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 40px; }
+    .btn-talk {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 64px; padding: 0 32px;
+      background: #fff; color: #000;
+      font-size: 16px; font-weight: 500; letter-spacing: -0.31px; white-space: nowrap;
+      transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .btn-prototype:hover,
+    .btn-more:hover,
+    .btn-talk:hover { background: #e8e8e8; transform: translateY(-2px); }
+    .availability { display: flex; align-items: center; gap: 16px; color: #fff; font-size: 16px; font-weight: 400; letter-spacing: -0.31px; }
+    .dot-wrap { position: relative; width: 10px; height: 10px; flex-shrink: 0; }
+    .dot-core { position: absolute; inset: 0; background: #fff; border-radius: 50%; }
+    .dot-pulse { position: absolute; inset: -9.6px; background: rgba(255,255,255,0.55); border-radius: 50%; animation: pulseDot 2.2s ease-in-out infinite; }
+    .footer-contacts { display: flex; flex-direction: column; gap: 8px; }
+    .footer-contacts a {
+      font-size: 16px; font-weight: 400; color: #fff; letter-spacing: -0.31px; line-height: 24px;
+      text-decoration: underline; text-decoration-color: rgba(255,255,255,0.35); text-underline-offset: 3px;
+      transition: text-decoration-color 0.22s, opacity 0.22s;
+    }
+    .footer-contacts a:hover { text-decoration-color: #fff; opacity: 0.75; }
+
+    /* ─── Scroll reveal ─── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1024px) {
+      .hero-section, .result-section, .before-after-section, .next-section { padding-left: 40px; padding-right: 40px; }
+      .page { padding: 0 40px; }
+      footer { padding: 60px 40px 52px; }
+    }
+
+    @media (max-width: 768px) {
+      .header { height: 80px; padding: 0 24px; }
+      main { padding-top: 80px; }
+      .hero-section, .result-section, .before-after-section, .next-section { padding-left: 24px; padding-right: 24px; }
+      .page { padding: 0 24px; }
+      .meta-info { justify-content: flex-start; padding-bottom: 24px; }
+      .hero-row { flex-direction: column; }
+      .hero-img-wrap { width: 100%; max-width: 480px; }
+      .layout-side { grid-template-columns: 1fr; }
+      .layout-side .extra-text--left,
+      .layout-side .extra-text--right { grid-column: 1; grid-row: auto; max-width: 100%; margin-left: 0; }
+      .section-heading { white-space: normal; }
+      .quotes { gap: 24px; }
+      .img-wireframe { grid-template-columns: 1fr; }
+      .before-after-row { grid-template-columns: 1fr; gap: 16px; }
+      .mockup-duo { grid-template-columns: 1fr; }
+      .hand-img-wrap img { width: 100%; max-width: 100%; margin-left: 0; margin-top: 0; margin-bottom: 0; }
+      footer { margin-top: 0; padding: 50px 24px 44px; }
+      .footer-top { margin-bottom: 40px; }
+      .footer-body { max-width: 100%; }
+      .next-card { width: 100%; max-width: 450px; }
+    }
+
+    @media (max-width: 480px) {
+      .logo { font-size: 22px; letter-spacing: -1.2px; }
+      .hero-section, .result-section, .before-after-section, .next-section { padding-left: 16px; padding-right: 16px; }
+      .page { padding: 0 16px; }
+      footer { padding: 40px 16px 36px; }
+      .btn-talk { height: 52px; padding: 0 22px; font-size: 15px; }
+      .footer-actions { gap: 24px; }
+      .next-header { flex-direction: column; align-items: flex-start; }
+    }
+  
+    /* a11y audit fixes: touch targets (>=44px) + focus-visible ring */
+    .menu-btn { position: relative; }
+    .menu-btn::before, .nav-close::before { content: ''; position: absolute; inset: -13px; }
+    a:focus-visible,
+    button:focus-visible,
+    .back-link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  
+    /* ===== Custom cursor (dot + ring, auto-invert via blend) ===== */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none; }
+      .cursor-dot, .cursor-ring {
+        position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000;
+        border-radius: 50%; mix-blend-mode: difference; will-change: transform;
+        opacity: 0; transition: opacity 0.3s ease;
+      }
+      .cursor-dot {
+        width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff;
+        transition: opacity 0.3s ease, transform 0.18s ease;
+      }
+      .cursor-ring {
+        width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 1.5px solid #fff;
+        transition: opacity 0.3s ease, width 0.25s ease, height 0.25s ease, margin 0.25s ease;
+      }
+      .cursor-ring.is-hovering { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+      .cursor-dot.is-hovering { transform: scale(0); }
+      .cursor-ready .cursor-dot, .cursor-ready .cursor-ring { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="header">
+    <a href="index.html" class="logo">JAN HANZLÍK</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Otevřít menu" aria-expanded="false">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ═══ Nav Overlay ═══ -->
+  <nav class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <button class="nav-close" id="navClose" aria-label="Zavřít menu">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+    <a href="moje-prace.html">Práce</a>
+    <a href="o-mne.html">O mně</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+
+  <main>
+
+    <!-- ═══ Hero ═══ -->
+    <section class="hero-section">
+
+      <div class="hero-top">
+        <a href="moje-prace.html" class="back-link" aria-label="Zpět na moji práci">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Zpět na seznam prací
+        </a>
+        <!-- Meta: right side -->
+        <div class="meta-info">
+        <div class="meta-table">
+          <div class="meta-labels">
+            <span>ODVĚTVÍ</span>
+            <span>KLIENT</span>
+            <span>ROK</span>
+          </div>
+          <div class="meta-values">
+            <span>UX/UI DESIGN</span>
+            <span>SAUNIA S.R.O.</span>
+            <span>2025/2026</span>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- Hero: image + title -->
+      <div class="hero-row">
+        <div class="hero-img-wrap">
+          <img
+            src="images/sau-01.png"
+            alt="Saunia aplikace – hero mockup"
+            loading="eager"
+          />
+        </div>
+        <h1 class="hero-title">REDESIGN APLIKACE SAUNIA</h1>
+      </div>
+    </section>
+
+    <!-- ═══ Content sections ═══ -->
+    <div class="page">
+      <div class="content-sections">
+
+        <!-- 1. Objevení problému -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Objevení problému</h2>
+            <div class="section-body">
+              <p>Zatímco Saunia, největší česká síť saunových světů, slibuje absolutní relax, její původní aplikace byla paradoxně zdrojem stresu. Kvůli zdlouhavému zakládání účtů a celkové závislosti na obsluze se tvořily zbytečné fronty na recepcích. Zákazníci nemohli spontánně čerpat věrnostní odměny (např. u baru), chyběly jim praktické informace o kapacitě a v nepřehledném, mdlém designu se zkrátka ztráceli.</p>
+              <p>Mým cílem bylo přetvořit tento frustrující proces ve svižný samoobslužný nástroj, který uleví přetíženému personálu a vrátí zákazníkům klid hned od prvního kliknutí.</p>
+            </div>
+          </div>
+          <div class="section-image reveal reveal-delay-1">
+            <img loading="lazy"
+              src="images/sau-02.png"
+              alt="Přehled problémů aplikace Saunia"
+            />
+          </div>
+        </div>
+
+        <!-- 2. Výzkum a data -->
+        <div class="layout-side reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Výzkum a data</h2>
+            <div class="section-body">
+              <p>Nechtěl jsem stavět na domněnkách, a tak jsem vyrazil za skutečnými lidmi. Během hloubkových rozhovorů se zákazníky jsem posbíral reálná data. Pro získání uceleného obrázku jsem tento výzkum doplnil také o verifikační rozhovory se zaměstnanci recepce, čímž jsem zmapoval i provozní stránku věci.</p>
+              <p>Pomocí tematické analýzy jsem odpovědi roztřídil a identifikoval hlavní bolesti. Vytvořil jsem Customer Journey Map, která jasně ukázala, že největší třecí plochou je nejistota ohledně cen a zbytečné čekání před turnikety.</p>
+            </div>
+          </div>
+          <div class="section-image reveal reveal-delay-1">
+            <img loading="lazy"
+              src="images/sau-03.png"
+              alt="Customer Journey Map – výzkum uživatelů"
+            />
+          </div>
+          <div class="quotes reveal reveal-delay-2">
+            <p class="quote-text">"Když jsem chtěl poprvé využít vstup zdarma, celý proces mě naštval – strávil jsem tam asi 20 minut navíc. Podle mě by akce měla fungovat tak, že přijdu na pobočku a hned ji mohu využít." — Miroslav, 28 let</p>
+            <p class="quote-text">"Jednoznačně mi chybí jednoduchý a vizuální ceník. Zpětně chci získat účtenku, tak to nejde. A vůbec se nevyznám v marketingových akcích, vždycky mi to musí vysvětlovat na recepci." — Radim, 42 let</p>
+          </div>
+        </div>
+
+        <!-- 3. Ideace -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Ideace</h2>
+            <div class="section-body">
+              <p>S jasnými daty v ruce jsem nezačal hned překreslovat obrazovky. Nejdříve jsem bolesti uživatelů přetavil v konkrétní designové výzvy pomocí HMW (How Might We) otázek. Vygenerované nápady jsem následně prohnal přes Value/Effort matici, abych měl jistotu, že budu designovat to, co přinese největší hodnotu s nejrozumnějším úsilím.</p>
+              <p>Teprve s takto seřazenými prioritami jsem úplně překopal informační architekturu, aby lidé našli ceník a aktuální obsazenost na dvě kliknutí. Pro ty nejdůležitější akce jsem navrhl nové User Flows a vše si rychle ověřil na hrubých wireframech, abych se nezdržoval detaily dřív, než bude fungovat samotná kostra.</p>
+            </div>
+          </div>
+          <div class="img-wireframe reveal reveal-delay-1">
+            <img loading="lazy"
+              class="bordered"
+              src="images/sau-04.png"
+              alt="Wireframe – HMW diagram"
+            />
+            <img loading="lazy"
+              src="images/sau-05.png"
+              alt="Wireframe – User flow"
+            />
+          </div>
+        </div>
+
+        <!-- 4. Vizuální design -->
+        <div class="layout-side reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Vizuální design</h2>
+            <div class="section-body" style="text-align: left;">
+              <p>Zastaralý vzhled bylo potřeba nahradit něčím, co působí moderně, ale zachovává ikonickou červenou barvu Saunie. Vytvořil jsem interaktivní High-fidelity prototyp podložený komplexním Design Systémem. Zastaralý a plochý vizuál bylo potřeba nahradit něčím moderním, co aplikaci dodá prostor a hloubku, ale zároveň zachová ikonickou červenou barvu Saunie.</p>
+            </div>
+          </div>
+          <div class="extra-text extra-text--left reveal reveal-delay-1">
+            <p>Nešlo ale jen o vizuální úpravy. Do interaktivního high-fidelity prototypu jsem rovnou zapracoval i zcela nové funkce, které zákazníci během výzkumu nejvíce postrádali. Zjednodušil jsem celý úvodní přihlašovací proces, přidal jsem možnost snadného zpětného stažení účtenek, navrhl mnohem přehlednější historii návštěv a zakomponoval praktický časovač odchodu, který uživatelům pohlídá dvouhodinový limit pobytu.</p>
+          </div>
+          <div class="extra-text extra-text--right reveal reveal-delay-2">
+            <p>Celý tento návrh jsem podložil komplexním design systémem, čistou typografií a plynulými mikrointerakcemi, díky kterým aplikace konečně ožila a poskytuje uživateli okamžitou zpětnou vazbu.</p>
+          </div>
+        </div>
+
+        <!-- Visual design screenshots -->
+        <div class="reveal">
+          <div class="section-image">
+            <img loading="lazy"
+              src="images/sau-06.png"
+              alt="Design systém – přehled komponent"
+            />
+          </div>
+          <div class="img-duo reveal reveal-delay-1">
+            <img loading="lazy"
+              src="images/sau-07.png"
+              alt="Vizuální design – detail obrazovky 1"
+            />
+            <img loading="lazy"
+              src="images/sau-08.png"
+              alt="Vizuální design – detail obrazovky 2"
+            />
+          </div>
+          <div class="section-image reveal reveal-delay-1">
+            <img loading="lazy"
+              src="images/sau-09.png"
+              alt="Vizuální design – přehled obrazovek"
+            />
+          </div>
+          <div class="section-image reveal reveal-delay-2">
+            <img loading="lazy"
+              src="images/sau-10.png"
+              alt="Vizuální design – finální návrh"
+            />
+          </div>
+        </div>
+
+        <!-- 5. Testování -->
+        <div class="layout-side reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Testování</h2>
+            <div class="section-body">
+              <p>Hezký design nic neznamená, dokud ho nezačnou používat lidé. Prototyp jsem podrobil uživatelskému testování metodou Think Aloud. Nechal jsem respondenty plnit konkrétní úkoly, jako bylo například dobití kreditu nebo nalezení aktuální obsazenosti pobočky.</p>
+              <p>Když jsem viděl, jak testující bez zaváhání prochází novým rozhraním a nezasekávají se na dříve problematických místech, věděl jsem, že jsme na správné cestě a že navržená struktura skutečně funguje.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ Mockup section (full bleed) ═══ -->
+    <section class="mockup-section">
+      <div class="page">
+        <div class="mockup-full reveal">
+          <img loading="lazy"
+            src="images/sau-11.png"
+            alt="iPhone mockup – aplikace Saunia v reálu"
+          />
+        </div>
+        <div class="mockup-duo reveal reveal-delay-1">
+          <img loading="lazy"
+            src="images/sau-12.png"
+            alt="Detail obrazovky – přihlášení"
+          />
+          <img loading="lazy"
+            src="images/sau-13.png"
+            alt="Detail obrazovky – dashboard"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Výsledek ═══ -->
+    <section class="result-section">
+      <div class="layout-stacked reveal">
+        <div class="section-text">
+          <h2 class="section-heading">Výsledek?</h2>
+          <div class="section-body" style="text-align: justify;">
+            <p>Původní ploché, textově přeplněné a matoucí rozhraní nahradil čistý, moderní design s jasnou vizuální hierarchií a hloubkou. Uživatelé už nemusí luštit skryté ceníky, hledat informace o ceremoniálech nebo zmateně tápat na recepci při uplatňování akcí.</p>
+            <p>Všechny dříve postrádané funkce — od indikátoru aktuální obsazenosti pobočky přes snadné stažení zpětných účtenek až po praktický časovač odchodu — jsou nyní přirozenou součástí plynulého uživatelského toku. Výsledkem je aplikace, která návštěvníky nebrzdí, ale naopak jim od první vteřiny zpříjemňuje cestu za odpočinkem.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ Před a po ═══ -->
+    <section class="before-after-section" style="margin-top: clamp(60px,7.8vw,100px)">
+      <h2 class="section-heading reveal">Před a Po</h2>
+      <div class="before-after-grid">
+        <div class="before-after-row reveal">
+          <img loading="lazy"
+            src="images/sau-14.png"
+            alt="Před redesignem – původní aplikace 1"
+          />
+          <img loading="lazy"
+            src="images/sau-15.png"
+            alt="Po redesignu – nová aplikace 1"
+          />
+        </div>
+        <div class="before-after-row reveal reveal-delay-1">
+          <img loading="lazy"
+            src="images/sau-16.png"
+            alt="Před redesignem – původní aplikace 2"
+          />
+          <img loading="lazy"
+            src="images/sau-17.png"
+            alt="Po redesignu – nová aplikace 2"
+          />
+        </div>
+      </div>
+
+      <!-- Hand mockup + design system -->
+      <div class="hand-section">
+        <div class="hand-img-wrap reveal">
+          <img loading="lazy"
+            src="images/sau-18.png"
+            alt="Ruka s iPhone – aplikace Saunia"
+          />
+        </div>
+        <div class="design-system-img reveal reveal-delay-1">
+          <img loading="lazy"
+            src="images/sau-19.png"
+            alt="Design systém – komponenty"
+          />
+        </div>
+        <a
+          href="https://www.figma.com/proto/SEw8mtXuKaQFQZBYnOqx9A/SAUNIA?node-id=3-3&starting-point-node-id=3%3A3&t=GPrMBhPxBKgmRs4a-1"
+          class="btn-prototype reveal reveal-delay-2"
+          target="_blank"
+          rel="noopener"
+        >Chci vidět prototyp</a>
+      </div>
+    </section>
+
+    <!-- ═══ Další případové studie ═══ -->
+    <section class="next-section">
+      <div class="next-header reveal">
+        <h2 class="next-title">Další případové studie</h2>
+        <a href="moje-prace.html" class="btn-more">Zobrazit více</a>
+      </div>
+      <div class="next-grid">
+        <a class="next-card reveal reveal-delay-1" href="ht-travel.html">
+          <img loading="lazy"
+            src="images/ht-hero.jpg"
+            alt="HT Travel – případová studie"
+          />
+          <div class="card-overlay" aria-hidden="true">
+            <div class="card-name">HT Travel</div>
+            <div class="card-type">Web Design · 48h sprint · Případová studie</div>
+          </div>
+        </a>
+        <a class="next-card reveal reveal-delay-2" href="ptacek.html">
+          <img loading="lazy"
+            src="images/prace-card-ptacek.png"
+            alt="Výživa Ptáček – případová studie"
+          />
+          <div class="card-overlay" aria-hidden="true">
+            <div class="card-name">Výživa Ptáček</div>
+            <div class="card-type">UX/UI Design · Brand Design · Případová studie</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══ Footer ═══ -->
+  <footer>
+    <div class="footer-top">
+      <a href="https://www.linkedin.com/in/jan-hanzlík-035748288" target="_blank" rel="noopener noreferrer" class="footer-linkedin">LinkedIn</a>
+    </div>
+    <div class="footer-body">
+      <h2 class="footer-heading reveal">
+        Zajímá vás, jak bych zapadl do vašeho týmu? Ozvěte se mi a pojďme probrat, na čem můžeme společně pracovat.
+      </h2>
+      <div class="footer-actions reveal reveal-delay-1">
+        <a href="mailto:harry.hanzlik44@gmail.com" class="btn-talk">Pojďme si promluvit</a>
+        <div class="availability">
+          <div class="dot-wrap" aria-hidden="true">
+            <div class="dot-pulse"></div>
+            <div class="dot-core"></div>
+          </div>
+          <span>Připravený na nové výzvy</span>
+        </div>
+      </div>
+      <div class="footer-contacts reveal reveal-delay-2">
+        <a href="tel:+420777504871">+420 777 504 871</a>
+        <a href="mailto:harry.hanzlik44@gmail.com">harry.hanzlik44@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══ Scripts ═══ -->
+  <script>
+    /* ── Menu toggle ── */
+    const menuBtn    = document.getElementById('menuBtn');
+    const navOverlay = document.getElementById('navOverlay');
+    const navClose   = document.getElementById('navClose');
+
+    function openNav() {
+      navOverlay.classList.add('open');
+      navOverlay.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeNav() {
+      navOverlay.classList.remove('open');
+      navOverlay.setAttribute('aria-hidden', 'true');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    menuBtn.addEventListener('click', openNav);
+    navClose.addEventListener('click', closeNav);
+    navOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && navOverlay.classList.contains('open')) closeNav();
+    });
+
+    /* ── Scroll reveal ── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    /* ── Header shrink on scroll ── */
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.style.padding = window.scrollY > 20 ? '0 36px' : '';
+    }, { passive: true });
+  </script>
+
+
+  <script>
+  (function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var dot = document.createElement('div'); dot.className = 'cursor-dot';
+    var ring = document.createElement('div'); ring.className = 'cursor-ring';
+    document.body.appendChild(dot); document.body.appendChild(ring);
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hoverSel = 'a, button, .back-link, [role="button"], input[type="submit"], .submit-btn, label';
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my, ready = false;
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+      if (!ready) { ready = true; rx = mx; ry = my; document.documentElement.classList.add('cursor-ready'); }
+      var hov = e.target.closest ? e.target.closest(hoverSel) : null;
+      ring.classList.toggle('is-hovering', !!hov);
+      dot.classList.toggle('is-hovering', !!hov);
+    }, { passive: true });
+    function loop() {
+      var k = reduce ? 1 : 0.18;
+      rx += (mx - rx) * k; ry += (my - ry) * k;
+      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    document.addEventListener('mouseleave', function () { document.documentElement.classList.remove('cursor-ready'); });
+    document.addEventListener('mouseenter', function () { if (ready) document.documentElement.classList.add('cursor-ready'); });
+  })();
+  </script>
+</body>
+</html>

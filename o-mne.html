@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>O mně — Jan Hanzlík</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #fff; color: #000; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+
+    /* ─── Page wrapper ─── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 0 70px; }
+
+    /* ─── Header ─── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 30px 36px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #f5f5f5;
+      transition: padding 0.35s ease;
+    }
+    .header.shrunk { padding: 18px 36px; }
+    .logo {
+      font-size: 30px; font-weight: 700; letter-spacing: -1.8px; color: #000;
+    }
+    .menu-btn {
+      background: none; border: none; cursor: pointer;
+      width: 18px; height: 18px;
+      display: grid; grid-template-columns: 5px 5px; grid-template-rows: 5px 5px;
+      gap: 8px;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .menu-btn:hover { transform: rotate(90deg); }
+    .menu-btn span { display: block; width: 5px; height: 5px; background: #000; }
+
+    /* ─── Nav Overlay ─── */
+    .nav-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-overlay.open { pointer-events: auto; opacity: 1; }
+    .nav-overlay a {
+      font-size: clamp(38px, 6vw, 68px); font-weight: 600; letter-spacing: -2.5px;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+    }
+    .nav-overlay.open a { opacity: 1; transform: translateY(0); }
+    .nav-overlay.open a:nth-child(2) { transition-delay: 0.06s; }
+    .nav-overlay.open a:nth-child(3) { transition-delay: 0.13s; }
+    .nav-overlay.open a:nth-child(4) { transition-delay: 0.20s; }
+    .nav-overlay a:hover { color: rgba(0,0,0,0.35); }
+    .nav-close {
+      position: absolute; top: 30px; right: 36px;
+      background: none; border: none; cursor: pointer;
+      width: 18px; height: 18px;
+      display: grid; grid-template-columns: 5px 5px; grid-template-rows: 5px 5px; gap: 8px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-close:hover { transform: rotate(90deg); }
+    .nav-close span { display: block; width: 5px; height: 5px; background: #000; }
+
+    /* ─── Hero ─── */
+    .hero-section { padding-top: clamp(120px, 15vw, 193px); }
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(36px, 5.5vw, 87px);
+    }
+    .hero-title {
+      font-size: clamp(72px, 14.06vw, 180px);
+      font-weight: 600;
+      letter-spacing: -0.06em;
+      line-height: 0.92;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(10px, 2.3vw, 30px);
+    }
+    .hero-sub {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .about-label {
+      font-size: clamp(20px, 2.34vw, 30px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+    .btn-cv {
+      background: #f5f5f5;
+      padding: 15px 26px;
+      font-size: clamp(14px, 1.25vw, 16px);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn-cv:hover { background: #e8e8e8; transform: translateY(-2px); }
+
+    /* ─── About content ─── */
+    .about-content {
+      margin-top: clamp(50px, 6.25vw, 80px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(40px, 5.47vw, 70px);
+    }
+    .about-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(28px, 4.7vw, 60px);
+      align-items: start;
+    }
+    .about-img img {
+      width: 100%;
+      object-fit: cover;
+      box-shadow: 0px 10px 15px 0px rgba(0,0,0,0.25);
+    }
+    .about-img--1 img { aspect-ratio: 511 / 617; }
+    .about-img--2 img { aspect-ratio: 511 / 580; }
+    .about-img--3 img { aspect-ratio: 509 / 560; }
+
+    .about-text {
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 400;
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+      max-width: 48ch;
+      display: flex;
+      flex-direction: column;
+    }
+    .about-text p + p { margin-top: 1.1em; }
+    .about-eyebrow {
+      display: inline-block;
+      border-top: 2px solid #000;
+      padding-top: 12px;
+      margin-bottom: 24px;
+      font-size: clamp(20px, 2.5vw, 30px);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      color: #000;
+    }
+    .about-img-full img {
+      width: 100%;
+      aspect-ratio: 1082 / 563;
+      object-fit: cover;
+      box-shadow: 0px 10px 15px 0px rgba(0,0,0,0.25);
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: #000;
+      margin-top: clamp(80px, 10.4vw, 133px);
+      padding: clamp(50px, 6.25vw, 80px) clamp(40px, 6.25vw, 80px) clamp(44px, 5.7vw, 73px);
+    }
+    .footer-top {
+      display: flex; justify-content: flex-end;
+      margin-bottom: clamp(40px, 6.25vw, 80px);
+    }
+    .footer-linkedin {
+      font-size: 16px; font-weight: 500; color: #fff;
+      letter-spacing: -0.02em; transition: opacity 0.2s;
+    }
+    .footer-linkedin:hover { opacity: 0.6; }
+    .footer-body {
+      max-width: 926px;
+      display: flex; flex-direction: column;
+      gap: clamp(24px, 3.1vw, 40px);
+    }
+    .footer-heading {
+      font-size: clamp(26px, 3.75vw, 48px);
+      font-weight: 500; line-height: 1.25; letter-spacing: 0.007em;
+      background: linear-gradient(90deg, #fff 0%, #4a5565 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .footer-actions {
+      display: flex; align-items: center;
+      gap: clamp(20px, 3.1vw, 40px); flex-wrap: wrap;
+    }
+    .btn-talk {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #fff; color: #000;
+      height: clamp(48px, 5vw, 64px);
+      padding: 0 clamp(20px, 2.5vw, 32px);
+      font-size: 16px; font-weight: 500; letter-spacing: -0.02em; white-space: nowrap;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn-talk:hover { background: #e8e8e8; transform: translateY(-2px); }
+    .status-dot-wrap { display: flex; align-items: center; gap: 16px; }
+    .status-dot { position: relative; width: 10px; height: 10px; flex-shrink: 0; }
+    .status-dot::before {
+      content: ''; position: absolute; inset: 0;
+      background: #fff; border-radius: 50%;
+    }
+    .status-dot::after {
+      content: '';
+      position: absolute; width: 29px; height: 29px;
+      background: rgba(255,255,255,0.6); border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50%       { transform: translate(-50%, -50%) scale(1.4); opacity: 0.2; }
+    }
+    .status-text { font-size: 16px; font-weight: 400; color: #fff; letter-spacing: -0.02em; }
+    .footer-contacts { display: flex; flex-direction: column; gap: 8px; }
+    .footer-contacts a {
+      font-size: 16px; font-weight: 400; color: #fff;
+      letter-spacing: -0.02em; text-decoration: underline; transition: opacity 0.2s;
+    }
+    .footer-contacts a:hover { opacity: 0.6; }
+
+    /* ─── Reveal animations ─── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.12s; }
+    .reveal-delay-2 { transition-delay: 0.24s; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .page { padding: 0 40px; }
+      .about-row { grid-template-columns: 1fr; gap: 28px; }
+      .about-row--reversed .about-img { order: -1; }
+      .about-img--1 img,
+      .about-img--2 img,
+      .about-img--3 img { aspect-ratio: 4 / 3; }
+    }
+    @media (max-width: 600px) {
+      .page { padding: 0 24px; }
+      .hero-section { padding-top: 110px; }
+      .header { padding: 20px 24px; }
+      .nav-close { top: 20px; right: 24px; }
+      .hero-sub { flex-direction: column; align-items: flex-start; gap: 20px; }
+      footer { padding: 44px 24px; }
+      .footer-top { margin-bottom: 36px; }
+      .footer-actions { flex-direction: column; align-items: flex-start; }
+    }
+  
+    /* a11y audit fixes: touch targets (>=44px) + focus-visible ring */
+    .menu-btn { position: relative; }
+    .menu-btn::before, .nav-close::before { content: ''; position: absolute; inset: -13px; }
+    a:focus-visible,
+    button:focus-visible,
+    .back-link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  
+    /* ===== Custom cursor (dot + ring, auto-invert via blend) ===== */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none; }
+      .cursor-dot, .cursor-ring {
+        position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000;
+        border-radius: 50%; mix-blend-mode: difference; will-change: transform;
+        opacity: 0; transition: opacity 0.3s ease;
+      }
+      .cursor-dot {
+        width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff;
+        transition: opacity 0.3s ease, transform 0.18s ease;
+      }
+      .cursor-ring {
+        width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 1.5px solid #fff;
+        transition: opacity 0.3s ease, width 0.25s ease, height 0.25s ease, margin 0.25s ease;
+      }
+      .cursor-ring.is-hovering { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+      .cursor-dot.is-hovering { transform: scale(0); }
+      .cursor-ready .cursor-dot, .cursor-ready .cursor-ring { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="header" id="header">
+    <a href="index.html" class="logo">JAN HANZLÍK</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Otevřít menu" aria-expanded="false">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ═══ Nav Overlay ═══ -->
+  <nav class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <button class="nav-close" id="navClose" aria-label="Zavřít menu">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+    <a href="moje-prace.html">Práce</a>
+    <a href="o-mne.html">O mně</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+
+  <!-- ═══ Hero ═══ -->
+  <section class="hero-section">
+    <div class="page hero-inner">
+      <h1 class="hero-title reveal">
+        <span>JAN</span>
+        <span>HANZLÍK</span>
+      </h1>
+      <div class="hero-sub reveal reveal-delay-1">
+        <span class="about-label">O mně</span>
+        <a href="files/Jan-Hanzlik-CV.pdf" class="btn-cv" target="_blank" rel="noopener">Přečíst CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Content ═══ -->
+  <main class="about-content page">
+
+    <!-- Řada 1: foto vlevo, text vpravo -->
+    <div class="about-row reveal">
+      <div class="about-img about-img--1">
+        <img
+          src="images/omne-1.jpg"
+          alt="Jan Hanzlík – portrét"
+          loading="eager"
+        />
+      </div>
+      <div class="about-text reveal reveal-delay-1">
+        <span class="about-eyebrow">Cesta k designu</span>
+        <p>K UX/UI designu jsem poprvé přičichl na vysoké škole při navrhování aplikace pro autonomní zavlažování. Tehdy jsem si začal uvědomovat, jak moc detaily v digitálním prostředí ovlivňují naše každodenní fungování.</p>
+        <p>Přestože jsem vystudoval strategický rozvoj podniku, v posledním ročníku mě naprosto pohltil předmět Service Design, na který jsem následně navázal rekvalifikací v UX/UI Design Academy.</p>
+      </div>
+    </div>
+
+    <!-- Řada 2: text vlevo, foto vpravo -->
+    <div class="about-row about-row--reversed reveal">
+      <div class="about-text reveal reveal-delay-1">
+        <span class="about-eyebrow">Můj přístup</span>
+        <p>Kreslit vizuálně dokonalé obrazovky už dnes umí kdekdo, to beru jako standard. Kde však vnímám svoji designérskou výhodu je naslouchání lidem. Rád řeším problémy, které lidi reálně trápí. Když jsem pracoval jako saunér, zákazníci si neustále stěžovali na naši věrnostní aplikaci. To mě motivovalo k jejímu kompletnímu redesignu. Věřím, že nejlepší design vzniká nasloucháním, ne odhadováním.</p>
+      </div>
+      <div class="about-img about-img--2">
+        <img
+          src="images/omne-2.jpg"
+          alt="Jan Hanzlík – práce"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    <!-- Řada 3: foto vlevo, text vpravo -->
+    <div class="about-row reveal">
+      <div class="about-img about-img--3">
+        <img
+          src="images/omne-3.jpg"
+          alt="Jan Hanzlík – hory"
+          loading="lazy"
+        />
+      </div>
+      <div class="about-text reveal reveal-delay-1">
+        <span class="about-eyebrow">Mimo Figmu</span>
+        <p>A když nesedím zrovna u Figmy? Moji životní filozofii nejlépe vystihuje lehká alergie na slovo komfort (ti, kteří si mysleli, že se mnou jedou na odpočinkovou dovolenou, by o tom mohli napsat knihu) a radost z hledání nových výzev. Baterky si totiž nejraději dobíjím lezením po horách, basketbalem nebo zachycováním světa z výšky pomocí dronu.</p>
+      </div>
+    </div>
+
+    <!-- Řada 4: celošířkové foto -->
+    <div class="about-img-full reveal">
+      <img
+        src="images/omne-full.jpg"
+        alt="Jan Hanzlík – krajina"
+        loading="lazy"
+      />
+    </div>
+
+  </main>
+
+  <!-- ═══ Footer ═══ -->
+  <footer>
+    <div class="footer-top">
+      <a href="https://www.linkedin.com/in/jan-hanzlík-035748288" target="_blank" rel="noopener" class="footer-linkedin">LinkedIn</a>
+    </div>
+    <div class="footer-body">
+      <p class="footer-heading">Zajímá vás, jak bych zapadl do vašeho týmu? Ozvěte se mi a pojďme probrat, na čem můžeme společně pracovat.</p>
+      <div class="footer-actions">
+        <a href="kontakt.html" class="btn-talk">Pojďme si promluvit</a>
+        <div class="status-dot-wrap">
+          <div class="status-dot"></div>
+          <span class="status-text">Připravený na nové výzvy</span>
+        </div>
+      </div>
+      <div class="footer-contacts">
+        <a href="tel:+420777504871">+420 777 504 871</a>
+        <a href="mailto:harry.hanzlik44@gmail.com">harry.hanzlik44@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Header shrink on scroll ──
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('shrunk', window.scrollY > 40);
+    }, { passive: true });
+
+    // ── Nav overlay ──
+    const menuBtn    = document.getElementById('menuBtn');
+    const navOverlay = document.getElementById('navOverlay');
+    const navClose   = document.getElementById('navClose');
+
+    function openNav() {
+      navOverlay.classList.add('open');
+      navOverlay.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeNav() {
+      navOverlay.classList.remove('open');
+      navOverlay.setAttribute('aria-hidden', 'true');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    menuBtn.addEventListener('click', openNav);
+    navClose.addEventListener('click', closeNav);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+
+    // ── Scroll reveal ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── Parallax na hero title ──
+    const heroTitle = document.querySelector('.hero-title');
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (heroTitle) {
+        heroTitle.style.transform = `translateY(${y * 0.18}px)`;
+        heroTitle.style.opacity = Math.max(0, 1 - y / 320);
+      }
+    }, { passive: true });
+  </script>
+
+
+  <script>
+  (function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var dot = document.createElement('div'); dot.className = 'cursor-dot';
+    var ring = document.createElement('div'); ring.className = 'cursor-ring';
+    document.body.appendChild(dot); document.body.appendChild(ring);
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hoverSel = 'a, button, .back-link, [role="button"], input[type="submit"], .submit-btn, label';
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my, ready = false;
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+      if (!ready) { ready = true; rx = mx; ry = my; document.documentElement.classList.add('cursor-ready'); }
+      var hov = e.target.closest ? e.target.closest(hoverSel) : null;
+      ring.classList.toggle('is-hovering', !!hov);
+      dot.classList.toggle('is-hovering', !!hov);
+    }, { passive: true });
+    function loop() {
+      var k = reduce ? 1 : 0.18;
+      rx += (mx - rx) * k; ry += (my - ry) * k;
+      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    document.addEventListener('mouseleave', function () { document.documentElement.classList.remove('cursor-ready'); });
+    document.addEventListener('mouseenter', function () { if (ready) document.documentElement.classList.add('cursor-ready'); });
+  })();
+  </script>
+</body>
+</html>

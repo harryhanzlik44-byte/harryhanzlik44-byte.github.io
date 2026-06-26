@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jan Hanzlík — UX/UI Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: #fff; color: #000; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+
+    /* ─── Page wrapper ─── */
+    .page { max-width: 1280px; margin: 0 auto; padding: 0 55px; }
+
+    /* ─── Header ─── */
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 30px 36px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid #f5f5f5;
+      transition: padding 0.35s ease;
+    }
+    .header.shrunk { padding: 18px 36px; }
+    .logo { font-size: 30px; font-weight: 700; letter-spacing: -1.8px; color: #000; }
+    .menu-btn {
+      background: none; border: none; cursor: pointer;
+      width: 18px; height: 18px;
+      display: grid; grid-template-columns: 5px 5px; grid-template-rows: 5px 5px; gap: 8px;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .menu-btn:hover { transform: rotate(90deg); }
+    .menu-btn span { display: block; width: 5px; height: 5px; background: #000; }
+
+    /* ─── Nav Overlay ─── */
+    .nav-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: #fff;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-overlay.open { pointer-events: auto; opacity: 1; }
+    .nav-overlay a {
+      font-size: clamp(38px, 6vw, 68px); font-weight: 600; letter-spacing: -2.5px;
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.38s ease, transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s;
+    }
+    .nav-overlay.open a { opacity: 1; transform: translateY(0); }
+    .nav-overlay.open a:nth-child(2) { transition-delay: 0.06s; }
+    .nav-overlay.open a:nth-child(3) { transition-delay: 0.13s; }
+    .nav-overlay.open a:nth-child(4) { transition-delay: 0.20s; }
+    .nav-overlay a:hover { color: rgba(0,0,0,0.35); }
+    .nav-close {
+      position: absolute; top: 30px; right: 36px;
+      background: none; border: none; cursor: pointer;
+      width: 18px; height: 18px;
+      display: grid; grid-template-columns: 5px 5px; grid-template-rows: 5px 5px; gap: 8px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .nav-close:hover { transform: rotate(90deg); }
+    .nav-close span { display: block; width: 5px; height: 5px; background: #000; }
+
+    /* ─── Hero ─── */
+    .hero-section {
+      padding-top: clamp(77px, 10.5vw, 135px);
+    }
+    .hero-top {
+      display: flex;
+      align-items: center;
+      gap: clamp(30px, 5.5vw, 70px);
+    }
+    .hero-title {
+      font-size: clamp(64px, 14.06vw, 180px);
+      font-weight: 600;
+      letter-spacing: -0.06em;
+      line-height: 0.92;
+      flex-shrink: 0;
+    }
+    .hero-title span { display: block; }
+    .hero-portrait {
+      flex-shrink: 0;
+      width: clamp(145px, 24.2vw, 310px);
+      height: clamp(145px, 24.2vw, 310px);
+      border-radius: 50%;
+      overflow: hidden;
+      margin-top: clamp(12px, 2vw, 28px);
+    }
+    .hero-portrait img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .hero-bottom {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(32px, 6.7vw, 86px);
+      margin-top: clamp(30px, 2.34vw, 30px);
+    }
+    .hero-email-wrap {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 1.56vw, 20px);
+      flex-shrink: 0;
+    }
+    .hero-email {
+      font-size: clamp(16px, 2.03vw, 26px);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .copy-btn {
+      background: none; border: none; cursor: pointer;
+      width: clamp(18px, 1.95vw, 25px);
+      height: clamp(18px, 1.95vw, 25px);
+      flex-shrink: 0;
+      opacity: 0.7;
+      transition: opacity 0.2s, transform 0.2s;
+      padding: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .copy-btn:hover { opacity: 1; transform: scale(1.1); }
+    .copy-btn img { width: 100%; height: 100%; }
+    .copy-feedback {
+      font-size: 13px; font-weight: 500; color: #555;
+      position: absolute; margin-top: 32px;
+      opacity: 0; transform: translateY(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none; white-space: nowrap;
+    }
+    .copy-feedback.show { opacity: 1; transform: translateY(0); }
+    .hero-desc {
+      font-size: clamp(18px, 2.81vw, 36px);
+      font-weight: 500;
+      line-height: 1.3;
+      max-width: 693px;
+    }
+
+    /* ─── Section header (label + button row) ─── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: clamp(24px, 3.1vw, 40px);
+    }
+    .section-label {
+      font-size: clamp(20px, 2.34vw, 30px);
+      font-weight: 500;
+      letter-spacing: -0.03em;
+    }
+    .btn-more {
+      background: #f5f5f5;
+      padding: 15px 26px;
+      font-size: clamp(13px, 1.25vw, 16px);
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn-more:hover { background: #e8e8e8; transform: translateY(-2px); }
+
+    /* ─── Works section ─── */
+    .works-section {
+      margin-top: clamp(45px, 5.85vw, 75px);
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 5.5vw, 70px);
+    }
+    .work-card {
+      display: block;
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      box-shadow: 0px 10px 10px 0px rgba(0,0,0,0.25);
+      will-change: box-shadow;
+      transition: box-shadow 0.4s ease;
+    }
+    .work-card:hover {
+      box-shadow: 0 22px 40px rgba(0,0,0,0.3);
+    }
+    .work-card img {
+      width: 100%; height: 100%; object-fit: cover;
+      will-change: transform;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .work-card:hover img { transform: scale(1.04); }
+    .work-card:first-child img { transform: scale(1.05); }
+    .work-card:first-child:hover img { transform: scale(1.1); }
+
+    /* Hover overlay */
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 55%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(20px, 3vw, 36px);
+      opacity: 0;
+      transition: opacity 0.38s ease;
+    }
+    .work-card:hover .card-overlay { opacity: 1; }
+    .card-name {
+      font-size: clamp(18px, 2.2vw, 28px);
+      font-weight: 600; color: #fff; letter-spacing: -0.8px;
+      transform: translateY(14px);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-type {
+      font-size: clamp(13px, 1.1vw, 15px);
+      font-weight: 400; color: rgba(255,255,255,0.72); margin-top: 4px;
+      transform: translateY(14px);
+      transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.04s;
+    }
+    .work-card:hover .card-name,
+    .work-card:hover .card-type { transform: translateY(0); }
+
+    /* ─── About section ─── */
+    .about-section {
+      margin-top: clamp(45px, 5.85vw, 75px);
+    }
+    .about-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(28px, 4.7vw, 60px);
+      align-items: start;
+    }
+    .about-quote {
+      font-size: clamp(26px, 4.06vw, 52px);
+      font-weight: 600;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      max-width: 16ch;
+      text-wrap: balance;
+    }
+    .about-quote .red { color: #ca0606; }
+    .about-photo {
+      box-shadow: 0px 10px 15px 0px rgba(0,0,0,0.25);
+      overflow: hidden;
+    }
+    .about-photo img {
+      width: 100%;
+      aspect-ratio: 550 / 590;
+      object-fit: cover;
+    }
+
+    /* ─── Footer ─── */
+    footer {
+      background: #000;
+      margin-top: clamp(80px, 10.4vw, 133px);
+      padding: clamp(50px, 6.25vw, 80px) clamp(40px, 6.25vw, 80px) clamp(44px, 5.7vw, 73px);
+    }
+    .footer-top {
+      display: flex; justify-content: flex-end;
+      margin-bottom: clamp(40px, 6.25vw, 80px);
+    }
+    .footer-linkedin {
+      font-size: 16px; font-weight: 500; color: #fff;
+      letter-spacing: -0.02em; transition: opacity 0.2s;
+    }
+    .footer-linkedin:hover { opacity: 0.6; }
+    .footer-body {
+      max-width: 926px;
+      display: flex; flex-direction: column;
+      gap: clamp(24px, 3.1vw, 40px);
+    }
+    .footer-heading {
+      font-size: clamp(26px, 3.75vw, 48px);
+      font-weight: 500; line-height: 1.25; letter-spacing: 0.007em;
+      background: linear-gradient(90deg, #fff 0%, #4a5565 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .footer-actions { display: flex; align-items: center; gap: clamp(20px, 3.1vw, 40px); flex-wrap: wrap; }
+    .btn-talk {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: #fff; color: #000;
+      height: clamp(48px, 5vw, 64px);
+      padding: 0 clamp(20px, 2.5vw, 32px);
+      font-size: 16px; font-weight: 500; letter-spacing: -0.02em; white-space: nowrap;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn-talk:hover { background: #e8e8e8; transform: translateY(-2px); }
+    .status-dot-wrap { display: flex; align-items: center; gap: 16px; }
+    .status-dot { position: relative; width: 10px; height: 10px; flex-shrink: 0; }
+    .status-dot::before { content: ''; position: absolute; inset: 0; background: #fff; border-radius: 50%; }
+    .status-dot::after {
+      content: '';
+      position: absolute; width: 29px; height: 29px;
+      background: rgba(255,255,255,0.6); border-radius: 50%;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      animation: pulseDot 2s ease-in-out infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+      50%       { transform: translate(-50%, -50%) scale(1.4); opacity: 0.2; }
+    }
+    .status-text { font-size: 16px; font-weight: 400; color: #fff; letter-spacing: -0.02em; }
+    .footer-contacts { display: flex; flex-direction: column; gap: 8px; }
+    .footer-contacts a {
+      font-size: 16px; font-weight: 400; color: #fff;
+      letter-spacing: -0.02em; text-decoration: underline; transition: opacity 0.2s;
+    }
+    .footer-contacts a:hover { opacity: 0.6; }
+
+    /* ─── Reveal animations ─── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.12s; }
+    .reveal-delay-2 { transition-delay: 0.24s; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .page { padding: 0 40px; }
+      .hero-bottom { flex-direction: column; gap: 20px; }
+      .hero-desc { max-width: 100%; }
+      .works-grid { gap: 20px; }
+      .about-row { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 640px) {
+      .page { padding: 0 24px; }
+      .hero-section { padding-top: 110px; }
+      .header { padding: 20px 24px; }
+      .nav-close { top: 20px; right: 24px; }
+      .hero-top { flex-direction: column; gap: 20px; }
+      .hero-portrait { width: clamp(100px, 40vw, 180px); height: clamp(100px, 40vw, 180px); }
+      .works-grid { grid-template-columns: 1fr; }
+      footer { padding: 44px 24px; }
+      .footer-top { margin-bottom: 36px; }
+      .footer-actions { flex-direction: column; align-items: flex-start; }
+    }
+  
+    /* a11y audit fixes: touch targets (>=44px) + focus-visible ring */
+    .menu-btn { position: relative; }
+    .menu-btn::before, .nav-close::before { content: ''; position: absolute; inset: -13px; }
+    a:focus-visible,
+    button:focus-visible,
+    .back-link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  
+    /* ===== Custom cursor (dot + ring, auto-invert via blend) ===== */
+    @media (hover: hover) and (pointer: fine) {
+      * { cursor: none; }
+      .cursor-dot, .cursor-ring {
+        position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000;
+        border-radius: 50%; mix-blend-mode: difference; will-change: transform;
+        opacity: 0; transition: opacity 0.3s ease;
+      }
+      .cursor-dot {
+        width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff;
+        transition: opacity 0.3s ease, transform 0.18s ease;
+      }
+      .cursor-ring {
+        width: 40px; height: 40px; margin: -20px 0 0 -20px; border: 1.5px solid #fff;
+        transition: opacity 0.3s ease, width 0.25s ease, height 0.25s ease, margin 0.25s ease;
+      }
+      .cursor-ring.is-hovering { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
+      .cursor-dot.is-hovering { transform: scale(0); }
+      .cursor-ready .cursor-dot, .cursor-ready .cursor-ring { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Header ═══ -->
+  <header class="header" id="header">
+    <a href="index.html" class="logo">JAN HANZLÍK</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Otevřít menu" aria-expanded="false">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <!-- ═══ Nav Overlay ═══ -->
+  <nav class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <button class="nav-close" id="navClose" aria-label="Zavřít menu">
+      <span></span><span></span>
+      <span></span><span></span>
+    </button>
+    <a href="moje-prace.html">Práce</a>
+    <a href="o-mne.html">O mně</a>
+    <a href="kontakt.html">Kontakt</a>
+  </nav>
+
+  <!-- ═══ Hero ═══ -->
+  <section class="hero-section page">
+
+    <div class="hero-top">
+      <h1 class="hero-title reveal">
+        <span>JAN</span>
+        <span>HANZLÍK</span>
+      </h1>
+      <div class="hero-portrait reveal reveal-delay-1">
+        <img
+          src="images/home-portrait.png"
+          alt="Jan Hanzlík – portrét"
+          loading="eager"
+        />
+      </div>
+    </div>
+
+    <div class="hero-bottom reveal reveal-delay-2">
+      <div class="hero-email-wrap" style="position:relative;">
+        <span class="hero-email">harry.hanzlik44@gmail.com</span>
+        <button class="copy-btn" id="copyBtn" aria-label="Kopírovat email">
+          <img src="images/home-copy-icon.svg" alt="kopírovat" />
+        </button>
+        <span class="copy-feedback" id="copyFeedback">Zkopírováno!</span>
+      </div>
+      <p class="hero-desc">Jsem začínající UX/UI designér, který věří, že skvělý design musí být hlavně funkční a srozumitelný. Rád řeším problémy a neustále se snažím posouvat své dovednosti dál.</p>
+    </div>
+
+  </section>
+
+  <!-- ═══ Moje práce ═══ -->
+  <section class="works-section page" style="margin-top: clamp(45px, 5.85vw, 75px);">
+
+    <div class="section-header reveal">
+      <span class="section-label">Moje práce</span>
+      <a href="moje-prace.html" class="btn-more">Více o práci</a>
+    </div>
+
+    <div class="works-grid reveal reveal-delay-1">
+      <a href="saunia.html" class="work-card" aria-label="Saunia – případová studie">
+        <img
+          src="images/home-card-saunia.png"
+          alt="Saunia – redesign mobilní aplikace"
+          loading="lazy"
+        />
+        <div class="card-overlay" aria-hidden="true">
+          <div class="card-name">Saunia</div>
+          <div class="card-type">UX/UI Design · Případová studie</div>
+        </div>
+      </a>
+      <a href="ptacek.html" class="work-card" aria-label="Výživa Ptáček – případová studie">
+        <img
+          src="images/home-card-ptacek.png"
+          alt="Výživa Ptáček – brand a UX/UI design"
+          loading="lazy"
+        />
+        <div class="card-overlay" aria-hidden="true">
+          <div class="card-name">Výživa Ptáček</div>
+          <div class="card-type">UX/UI Design · Brand Design · Případová studie</div>
+        </div>
+      </a>
+    </div>
+
+  </section>
+
+  <!-- ═══ O mně ═══ -->
+  <section class="about-section page">
+
+    <div class="section-header reveal">
+      <span class="section-label">O mně</span>
+      <a href="o-mne.html" class="btn-more">Více o mně</a>
+    </div>
+
+    <div class="about-row">
+      <p class="about-quote reveal">
+        Rád řeším problémy, které lidi <span class="red">reálně trápí.</span> Věřím, že nejlepší design vzniká nasloucháním, ne odhadováním.
+      </p>
+      <div class="about-photo reveal reveal-delay-1">
+        <img
+          src="images/home-about.jpg"
+          alt="Jan Hanzlík – při práci"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer>
+    <div class="footer-top">
+      <a href="https://www.linkedin.com/in/jan-hanzlík-035748288" target="_blank" rel="noopener" class="footer-linkedin">LinkedIn</a>
+    </div>
+    <div class="footer-body">
+      <p class="footer-heading">Zajímá vás, jak bych zapadl do vašeho týmu? Ozvěte se mi a pojďme probrat, na čem můžeme společně pracovat.</p>
+      <div class="footer-actions">
+        <a href="kontakt.html" class="btn-talk">Pojďme si promluvit</a>
+        <div class="status-dot-wrap">
+          <div class="status-dot"></div>
+          <span class="status-text">Připravený na nové výzvy</span>
+        </div>
+      </div>
+      <div class="footer-contacts">
+        <a href="tel:+420777504871">+420 777 504 871</a>
+        <a href="mailto:harry.hanzlik44@gmail.com">harry.hanzlik44@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Header shrink ──
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('shrunk', window.scrollY > 40);
+    }, { passive: true });
+
+    // ── Nav overlay ──
+    const menuBtn    = document.getElementById('menuBtn');
+    const navOverlay = document.getElementById('navOverlay');
+    const navClose   = document.getElementById('navClose');
+
+    function openNav() {
+      navOverlay.classList.add('open');
+      navOverlay.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeNav() {
+      navOverlay.classList.remove('open');
+      navOverlay.setAttribute('aria-hidden', 'true');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+    menuBtn.addEventListener('click', openNav);
+    navClose.addEventListener('click', closeNav);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+
+    // ── Copy email ──
+    const copyBtn      = document.getElementById('copyBtn');
+    const copyFeedback = document.getElementById('copyFeedback');
+    let copyTimer;
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText('harry.hanzlik44@gmail.com').then(() => {
+        copyFeedback.classList.add('show');
+        clearTimeout(copyTimer);
+        copyTimer = setTimeout(() => copyFeedback.classList.remove('show'), 2000);
+      });
+    });
+
+    // ── Scroll reveal ──
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -32px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── Parallax na hero title + portrait ──
+    const heroTitle    = document.querySelector('.hero-title');
+    const heroPortrait = document.querySelector('.hero-portrait');
+    window.addEventListener('scroll', () => {
+      const y  = window.scrollY;
+      const tx = `translateY(${y * 0.18}px)`;
+      const op = Math.max(0, 1 - y / 320);
+      if (heroTitle) {
+        heroTitle.style.transition = 'opacity 0.2s ease';
+        heroTitle.style.transform  = tx;
+        heroTitle.style.opacity    = op;
+      }
+      if (heroPortrait) {
+        heroPortrait.style.transition = 'opacity 0.2s ease';
+        heroPortrait.style.transform  = tx;
+        heroPortrait.style.opacity    = op;
+      }
+    }, { passive: true });
+  </script>
+
+
+  <script>
+  (function () {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    var dot = document.createElement('div'); dot.className = 'cursor-dot';
+    var ring = document.createElement('div'); ring.className = 'cursor-ring';
+    document.body.appendChild(dot); document.body.appendChild(ring);
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hoverSel = 'a, button, .back-link, [role="button"], input[type="submit"], .submit-btn, label';
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2, rx = mx, ry = my, ready = false;
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = 'translate(' + mx + 'px,' + my + 'px)';
+      if (!ready) { ready = true; rx = mx; ry = my; document.documentElement.classList.add('cursor-ready'); }
+      var hov = e.target.closest ? e.target.closest(hoverSel) : null;
+      ring.classList.toggle('is-hovering', !!hov);
+      dot.classList.toggle('is-hovering', !!hov);
+    }, { passive: true });
+    function loop() {
+      var k = reduce ? 1 : 0.18;
+      rx += (mx - rx) * k; ry += (my - ry) * k;
+      ring.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    document.addEventListener('mouseleave', function () { document.documentElement.classList.remove('cursor-ready'); });
+    document.addEventListener('mouseenter', function () { if (ready) document.documentElement.classList.add('cursor-ready'); });
+  })();
+  </script>
+</body>
+</html>
