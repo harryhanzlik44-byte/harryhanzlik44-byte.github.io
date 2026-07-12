@@ -3,7 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Výživa Ptáček – Případová studie — Jan Hanzlík</title>
+  <title>Move Together – Případová studie — Jan Hanzlík</title>
+  <meta name="description" content="Případová studie tvorby brandové identity pro běžeckou a outdoorovou komunitu Move Together z Rychnova nad Kněžnou: nové logo, ikona, barevnost a aplikace značky." />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Move Together – Případová studie" />
+  <meta property="og:description" content="Tvorba brandové identity pro běžeckou a outdoorovou komunitu Move Together: logo, ikona, barevnost a aplikace značky." />
+  <meta property="og:image" content="images/mt-hero.jpg" />
+  <meta property="og:locale" content="cs_CZ" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Move Together – Případová studie" />
+  <meta name="twitter:description" content="Tvorba brandové identity pro běžeckou a outdoorovou komunitu Move Together: logo, ikona, barevnost a aplikace značky." />
+  <meta name="twitter:image" content="images/mt-hero.jpg" />
+  <noscript>
+    <style>
+      .reveal { opacity: 1 !important; transform: none !important; }
+    </style>
+  </noscript>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -72,7 +87,7 @@
       transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .menu-btn:hover { transform: rotate(90deg); }
-    .menu-btn span { display: block; width: 5px; height: 5px; background: #1c3035; }
+    .menu-btn span { display: block; width: 5px; height: 5px; background: #1a362d; }
 
     /* ─── Nav Overlay ─── */
     .nav-overlay {
@@ -102,7 +117,7 @@
       transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .nav-close:hover { transform: rotate(90deg); }
-    .nav-close span { display: block; width: 5px; height: 5px; background: #1c3035; }
+    .nav-close span { display: block; width: 5px; height: 5px; background: #1a362d; }
 
     /* ─── Main ─── */
     main { padding-top: 93px; }
@@ -200,7 +215,7 @@
     .hero-subtitle {
       font-size: clamp(18px, 2.5vw, 32px);
       font-weight: 500;
-      color: #be430e;
+      color: #ff5a00;
       letter-spacing: -0.9px;
       margin-top: clamp(24px, 4vw, 48px);
     }
@@ -217,7 +232,7 @@
     .section-heading {
       font-size: clamp(20px, 2.34vw, 30px);
       font-weight: 700;
-      color: #be430e;
+      color: #ff5a00;
       letter-spacing: -0.9px;
       line-height: 36px;
       white-space: nowrap;
@@ -240,22 +255,6 @@
       max-width: 1140px;
     }
 
-    /* Layout B: heading beside text — CSS Grid */
-    .layout-side {
-      display: grid;
-      grid-template-columns: max-content 1fr;
-      column-gap: clamp(40px, 7.5vw, 96px);
-      row-gap: clamp(16px, 2.3vw, 30px);
-      align-items: start;
-    }
-    .layout-side .section-text { display: contents; }
-    .layout-side .section-body { text-align: justify; }
-    .layout-side .section-image,
-    .layout-side .img-duo,
-    .layout-side .palette,
-    .layout-side .media-block { grid-column: 1 / -1; }
-    .layout-side .extra-text { grid-column: 2; margin-top: 0; }
-
     /* Section image */
     .section-image {
       margin-top: clamp(16px, 2.3vw, 30px);
@@ -264,6 +263,14 @@
       width: 100%;
       height: auto;
       display: block;
+    }
+    /* Shrunken, centered variant (e.g. original logo sample):
+       caption + image share one 75% wrapper so the caption's right
+       edge lines up with the image's right edge. */
+    .section-figure.is-small {
+      width: 75%;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     /* Caption above an image (right aligned) */
@@ -287,85 +294,147 @@
     }
     .img-duo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Color palette (brand) */
-    .palette {
-      margin-top: clamp(24px, 3.5vw, 50px);
-      max-width: 860px;
-      display: flex;
-      flex-direction: column;
-      gap: clamp(20px, 2.6vw, 34px);
-    }
-    .palette-group { display: flex; flex-direction: column; gap: 10px; }
-    .palette-label {
-      display: flex;
-      gap: 32px;
-      font-size: clamp(12px, 1.1vw, 14px);
-      font-weight: 600;
-      letter-spacing: 0.2px;
-      color: #000;
-    }
-    .palette-label span:first-child { min-width: 70px; }
-    .palette-label .hex { opacity: 0.55; font-weight: 500; }
-    .palette-primary {
-      background: #1c3035;
-      padding: 22px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .palette-primary span {
-      font-size: clamp(13px, 1.25vw, 15px);
-      font-weight: 500;
-      color: #eee0d3;
-    }
-    .palette-secondary {
+    /* ─── Logo suite (icon / horizontal / vertical) ─── */
+    .logo-trio {
+      margin-top: clamp(16px, 2.3vw, 30px);
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: clamp(8px, 1vw, 12px);
+      grid-template-columns: 1fr 1.4fr;
+      gap: clamp(18px, 2.2vw, 34px) clamp(12px, 1.4vw, 20px);
+      align-items: start;
     }
-    .palette-secondary div {
-      height: clamp(72px, 8vw, 90px);
+    .logo-trio .cap-item.span-2 { grid-column: 1 / -1; }
+    .logo-board {
+      background: #fff;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(13px, 1.25vw, 15px);
+      overflow: hidden;
+    }
+    .logo-board img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .logo-board.is-icon { aspect-ratio: 1 / 1; padding: clamp(16px, 2.4vw, 40px); }
+    .logo-board.is-vertical { aspect-ratio: 1838 / 1311; padding: clamp(16px, 2.4vw, 42px); }
+    .logo-board.is-horizontal { aspect-ratio: 3186 / 984; padding: clamp(20px, 3vw, 56px); }
+    .logo-board.is-znak { aspect-ratio: 4 / 5; padding: clamp(12px, 2vw, 32px); }
+
+    /* ─── Captioned media: caption sits directly above its image ─── */
+    .cap-item { margin: 0; display: flex; flex-direction: column; }
+    .cap-item > .img-caption { margin-top: 0; margin-bottom: clamp(8px, 1vw, 14px); }
+    .cap-photo { width: 100%; aspect-ratio: 3 / 2; overflow: hidden; }
+    .cap-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* ─── Inline brand videos ─── */
+    .brand-video { margin-top: clamp(16px, 2.3vw, 30px); }
+    .brand-video video { display: block; }
+    /* Logo reveal: full column width, 16:9 on black */
+    .brand-video.is-reveal { position: relative; }
+    .brand-video.is-reveal video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #000;
+    }
+    .video-toggle {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      transition: opacity 0.25s ease, background 0.2s ease;
+    }
+    .brand-video.is-reveal:hover .video-toggle,
+    .video-toggle:focus-visible { opacity: 1; }
+    .video-toggle:hover { background: rgba(0, 0, 0, 0.75); }
+    .video-toggle:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .video-toggle svg { width: 18px; height: 18px; display: block; fill: currentColor; }
+    .video-toggle .icon-play { display: none; }
+    .video-toggle.is-paused .icon-play { display: block; }
+    .video-toggle.is-paused .icon-pause { display: none; }
+    @media (hover: none) {
+      .video-toggle { opacity: 1; }
+    }
+    /* ─── Color swatches ─── */
+    .swatches {
+      margin-top: clamp(24px, 3.5vw, 50px);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(8px, 1vw, 14px);
+    }
+    .swatch {
+      aspect-ratio: 3 / 4;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(14px, 1.6vw, 22px);
+    }
+    .swatch .hex {
+      font-size: clamp(15px, 1.6vw, 21px);
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .swatch .name {
+      font-size: clamp(11px, 1.05vw, 14px);
       font-weight: 500;
+      opacity: 0.72;
+      margin-top: 5px;
     }
 
-    /* Media row: image + text side by side */
-    .media-block { margin-top: clamp(30px, 4.7vw, 60px); display: flex; flex-direction: column; gap: clamp(30px, 4.7vw, 60px); }
-    .media-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(24px, 4vw, 60px);
-      align-items: start;
+    /* ─── Brand personality board ─── */
+    .persona {
+      margin-top: clamp(24px, 3.5vw, 50px);
+      background: #171717;
+      padding: clamp(28px, 4vw, 56px) clamp(22px, 4vw, 60px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(14px, 1.9vw, 24px);
     }
-    .media-row img { width: 100%; height: auto; display: block; }
-    .media-row .media-text { display: flex; flex-direction: column; gap: 14px; }
-    .media-sub-heading {
-      font-size: clamp(18px, 2vw, 26px);
+    .persona-title {
+      font-size: clamp(15px, 1.6vw, 20px);
       font-weight: 700;
-      color: #000;
-      letter-spacing: -0.7px;
+      letter-spacing: 0.02em;
+      color: #e9e1d8;
+      margin-bottom: clamp(6px, 1vw, 12px);
     }
-    .media-text p {
-      font-size: clamp(15px, 1.6vw, 21px);
-      font-weight: 500;
-      color: #000;
-      letter-spacing: -0.5px;
-      line-height: 1.45;
-      text-align: justify;
+    .persona-row {
+      display: grid;
+      grid-template-columns: minmax(72px, 1fr) 2.6fr minmax(72px, 1fr);
+      align-items: center;
+      gap: clamp(12px, 2vw, 30px);
+      padding-bottom: clamp(14px, 1.9vw, 24px);
+      border-bottom: 1px solid rgba(233, 225, 216, 0.12);
     }
-    .media-text p + p { margin-top: 0.7em; }
-    /* text-only principle block */
-    .media-note {
-      max-width: 560px;
-      display: flex; flex-direction: column; gap: 14px;
+    .persona-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .persona-label {
+      font-size: clamp(10px, 1.1vw, 14px);
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: rgba(233, 225, 216, 0.4);
     }
+    .persona-label.right { text-align: right; }
+    .persona-label.active { color: #e9e1d8; }
+    .persona-track { position: relative; height: 1px; background: rgba(233, 225, 216, 0.18); }
+    .persona-mark {
+      position: absolute; top: 50%;
+      width: 14px; height: 14px;
+      transform: translate(-50%, -50%);
+    }
+    .persona-mark::before, .persona-mark::after { content: ''; position: absolute; background: #ff5a00; }
+    .persona-mark::before { left: 50%; top: 0; width: 2px; height: 100%; transform: translateX(-50%); }
+    .persona-mark::after { top: 50%; left: 0; height: 2px; width: 100%; transform: translateY(-50%); }
 
     /* ─── Mockup gallery (full bleed) ─── */
     .mockup-section {
-      padding: clamp(30px, 4vw, 50px) 0 clamp(60px, 7.8vw, 100px);
+      padding: clamp(30px, 4vw, 50px) 0 clamp(28px, 4vw, 56px);
     }
     .mockup-section .page { display: flex; flex-direction: column; gap: clamp(24px, 3vw, 40px); }
     .mockup-full img { width: 100%; height: auto; }
@@ -375,6 +444,13 @@
       padding: clamp(20px, 3vw, 40px) 70px clamp(60px, 7.8vw, 100px);
       max-width: 1280px;
       margin: 0 auto;
+    }
+    .result-intro {
+      max-width: 1140px;
+      margin-bottom: clamp(36px, 5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
     .compare-grid {
       display: grid;
@@ -408,27 +484,8 @@
       font-size: 14px;
       line-height: 1;
     }
-    .ico-x { border: 1.5px solid #be430e; color: #be430e; }
-    .ico-check { background: #2e8b41; color: #fff; }
-    .compare-cta {
-      display: flex;
-      justify-content: center;
-      margin-top: clamp(40px, 5vw, 64px);
-    }
-
-    /* "Chci vidět" button (light pill) */
-    .btn-prototype {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #f5f5f5;
-      color: #000;
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: -0.64px;
-      padding: 15px 26px;
-      transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
+    .ico-x { border: 1.5px solid #ff5a00; color: #ff5a00; }
+    .ico-check { background: #1a362d; color: #fff; }
 
     /* ─── Next studies section ─── */
     .next-section {
@@ -468,6 +525,8 @@
       white-space: nowrap;
       transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .btn-more:hover,
+    .btn-talk:hover { background: #e8e8e8; transform: translateY(-2px); }
 
     .next-card {
       display: block;
@@ -529,9 +588,6 @@
       font-size: 16px; font-weight: 500; letter-spacing: -0.31px; white-space: nowrap;
       transition: background 0.25s, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .btn-prototype:hover,
-    .btn-more:hover,
-    .btn-talk:hover { background: #e8e8e8; transform: translateY(-2px); }
     .availability { display: flex; align-items: center; gap: 16px; color: #fff; font-size: 16px; font-weight: 400; letter-spacing: -0.31px; }
     .dot-wrap { position: relative; width: 10px; height: 10px; flex-shrink: 0; }
     .dot-core { position: absolute; inset: 0; background: #fff; border-radius: 50%; }
@@ -569,13 +625,12 @@
       .hero-row { flex-direction: column; }
       .hero-img-wrap { width: 100%; max-width: 480px; }
       .hero-text { padding-top: 24px; }
-      .layout-side { grid-template-columns: 1fr; }
-      .layout-side .extra-text { grid-column: 1; }
       .section-heading { white-space: normal; }
       .img-duo { grid-template-columns: 1fr; }
-      .media-row { grid-template-columns: 1fr; }
-      .media-row.reverse .media-text { order: -1; }
-      .palette-secondary { grid-template-columns: 1fr; }
+      .logo-trio { grid-template-columns: 1fr; }
+      .logo-board.is-icon, .logo-board.is-vertical { aspect-ratio: 16 / 9; }
+      .swatches { grid-template-columns: 1fr 1fr; }
+      .persona-row { grid-template-columns: minmax(60px, 1fr) 1.8fr minmax(60px, 1fr); gap: 10px; }
       .compare-grid { grid-template-columns: 1fr; gap: 36px; }
       footer { margin-top: 0; padding: 50px 24px 44px; }
       .footer-top { margin-bottom: 40px; }
@@ -590,16 +645,17 @@
       footer { padding: 40px 16px 36px; }
       .btn-talk { height: 52px; padding: 0 22px; font-size: 15px; }
       .footer-actions { gap: 24px; }
+      .persona-label { letter-spacing: 0.05em; }
       .next-header { flex-direction: column; align-items: flex-start; }
     }
-  
+
     /* a11y audit fixes: touch targets (>=44px) + focus-visible ring */
     .menu-btn { position: relative; }
     .menu-btn::before, .nav-close::before { content: ''; position: absolute; inset: -13px; }
     a:focus-visible,
     button:focus-visible,
     .back-link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
-  
+
     /* ===== Custom cursor (dot + ring, auto-invert via blend) ===== */
     @media (hover: hover) and (pointer: fine) {
       * { cursor: none; }
@@ -663,8 +719,8 @@
             <span>ROK</span>
           </div>
           <div class="meta-values">
-            <span>UX/UI DESIGN, BRAND DESIGN</span>
-            <span>VÝŽIVA PTÁČEK s.r.o.</span>
+            <span>BRAND DESIGN, VIZUÁLNÍ IDENTITA</span>
+            <span>MOVE TOGETHER</span>
             <span>2026</span>
           </div>
         </div>
@@ -675,14 +731,14 @@
       <div class="hero-row">
         <div class="hero-img-wrap">
           <img
-            src="images/pt-hero.jpg"
-            alt="Výživa Ptáček – redesign webu, hero mockup"
+            src="images/mt-hero.jpg"
+            alt="Move Together – nové logo na patternu z vrstevnic"
             loading="eager"
           />
         </div>
         <div class="hero-text">
-          <h1 class="hero-title">REDESIGN VÝŽIVOVÉHO PORADENSTVÍ PTÁČEK</h1>
-          <p class="hero-subtitle">Od hobby webu k digitální autoritě</p>
+          <h1 class="hero-title">REDESIGN VIZUÁLNÍ IDENTITY MOVE TOGETHER</h1>
+          <p class="hero-subtitle">Od nahodilého znaku k rozběhnuté značce</p>
         </div>
       </div>
     </section>
@@ -695,22 +751,24 @@
         <div class="layout-stacked reveal">
           <div class="section-text">
             <h2 class="section-heading">Úvod</h2>
-            <div class="section-body" style="max-width: 846px; text-align: justify;">
-              <p>Všechno začalo dohodou na kompletním redesignu Robinových stávajících stránek. Robinův profesní růst natolik předehnal jeho původní web, že stávající prezentace začala jeho podnikání spíše brzdit. Naším cílem bylo vytvořit digitální identitu, která bude odpovídat expertovi 21. století.</p>
+            <div class="section-body" style="text-align: justify;">
+              <p>Move Together je běžecká a outdoorová komunita z Rychnova nad Kněžnou. Pořádá společné běhy, pochody do přírody a volnočasové akce pro lidi, které spojuje chuť hýbat se venku. Komunita rychle rostla, ale její vizuální identita zůstala u prvního loga, které vzniklo spíš narychlo než promyšleně. Mým úkolem bylo dát téhle partě značku stejně energickou a sebevědomou, jako je ona sama.</p>
             </div>
-          </div>
-          <div class="img-caption reveal reveal-delay-1">Robinův předchozí web</div>
-          <div class="section-image reveal reveal-delay-1" style="margin-top: 0;">
-            <img loading="lazy" src="images/pt-prevweb.jpg" alt="Robinův předchozí web – screenshot" />
           </div>
         </div>
 
         <!-- Fáze 1 -->
         <div class="layout-stacked reveal">
           <div class="section-text">
-            <h2 class="section-heading">Fáze 1 – Objevování a strategie</h2>
+            <h2 class="section-heading">Fáze 1 – Výchozí stav</h2>
             <div class="section-body" style="text-align: justify;">
-              <p>Celý proces odstartovala hloubková konzultace, během které jsme definovali obchodní cíle, misi a především Robinova ideálního klienta. Zjistili jsme, že jím není profesionální sportovec, ale vytížený člověk hledající řád a energii. Tato strategická fáze byla klíčová, protože nám umožnila zcela opustit agresivní fitness klišé a postavit celou budoucí komunikaci na klidu, srozumitelnosti a vědecké racionalitě.</p>
+              <p>Původní logo míchalo hned několik výtvarných světů najednou: realisticky pojatého jelena, plochou siluetu hory a kruh s pestrým barevným přechodem. Každý prvek mluvil jiným jazykem a dohromady působily nesourodě. Logo navíc nebylo škálovatelné. V malých velikostech detaily zanikaly a symbol se slil do beztvaré skvrny. Chyběla jakákoli pravidla, značka neměla definované barvy, typografii ani jednotný styl, takže na každém plakátu i příspěvku vypadala trochu jinak.</p>
+            </div>
+          </div>
+          <div class="section-figure is-small reveal reveal-delay-1">
+            <div class="img-caption">Původní logo Move Together</div>
+            <div class="section-image" style="margin-top: 0;">
+              <img loading="lazy" src="images/mt-old-logo.png" alt="Původní logo Move Together – jelen s horou v kruhu" />
             </div>
           </div>
         </div>
@@ -718,104 +776,150 @@
         <!-- Fáze 2 -->
         <div class="layout-stacked reveal">
           <div class="section-text">
-            <h2 class="section-heading">Fáze 2 – Dospělá vizuální identita</h2>
+            <h2 class="section-heading">Fáze 2 – Strategie a osobnost</h2>
             <div class="section-body" style="text-align: justify;">
-              <p>S jasnou strategií v zádech jsme jako první krok vytvořili kompletní vizuální identitu a brand manuál, který se záměrně distancuje od oborových stereotypů. Naším cílem bylo vyhnout se „bio“ zelené barvě a motivům listů či salátů. Navrhli jsme moderní, minimalistické logo, kde ikonický symbol ptáčka plynule přechází do tvaru vidličky, čímž vznikl svébytný symbol moderní výživy.</p>
+              <p>Nechtěl jsem stavět na dojmu, a tak jsme si nejdřív ujasnili, kým Move Together vlastně je a jak se má cítit. Na škále značkových vlastností jsme se shodli na komunitě, která je přátelská, lidská a dostupná, spíš mladá a neformální, ale zároveň s jasným tahem vpřed. Tři hodnoty se ukázaly jako nosné: pohyb, rychlost a dynamika.</p>
             </div>
           </div>
-          <div class="img-duo reveal reveal-delay-1">
-            <img loading="lazy" src="images/pt-ig1.jpg" alt="Vizitka Ptáček – brand mockup" />
-            <img loading="lazy" src="images/pt-screen1.jpg" alt="Logo Ptáček – prezentace identity" />
-          </div>
-          <div class="section-body reveal reveal-delay-1" style="text-align: justify; margin-top: clamp(16px,2.3vw,30px);">
-            <p>Pro značku jsme definovali zemitou paletu postavenou na Temné břidlici a Mandlové, které evokují stabilitu a lidskost. Dynamiku a odkaz na sport jsme do manuálu vložili skrze akcenty Pálené mědi a Terakoty. Celý vizuální systém jsme ukotvili v sebevědomé typografii Montserrat a Inter. Tento radikální odklon od klišé okamžitě oddělil Robina od masy amatérských poradců a definoval ho jako dospělého a důvěryhodného partnera ještě předtím, než padl první pixel webu.</p>
-          </div>
-          <div class="palette reveal reveal-delay-2">
-            <div class="palette-group">
-              <div class="palette-label"><span>Primary</span><span class="hex">#1C3035</span></div>
-              <div class="palette-primary">
-                <span>Exaktní</span>
-                <span>Stabilní</span>
-                <span>Sebevědomá</span>
-                <span>Racionální</span>
-              </div>
+          <div class="persona reveal reveal-delay-1">
+            <div class="persona-title">MOVE TOGETHER</div>
+            <div class="persona-row">
+              <span class="persona-label active">Liberální</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 25%;"></span></span>
+              <span class="persona-label right">Konzervativní</span>
             </div>
-            <div class="palette-group">
-              <div class="palette-label"><span>Secondary</span><span class="hex">#BE430E</span><span class="hex">#CD7451</span><span class="hex">#EEE0D3</span></div>
-              <div class="palette-secondary">
-                <div style="background:#be430e; color:#eee0d3;">Energická</div>
-                <div style="background:#cd7451; color:#fff;">Vitální</div>
-                <div style="background:#eee0d3; color:#1c3035;">Organická</div>
-              </div>
+            <div class="persona-row">
+              <span class="persona-label active">Dostupný</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 24%;"></span></span>
+              <span class="persona-label right">Luxusní</span>
+            </div>
+            <div class="persona-row">
+              <span class="persona-label active">Emotivní</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 38%;"></span></span>
+              <span class="persona-label right">Racionální</span>
+            </div>
+            <div class="persona-row">
+              <span class="persona-label">Vážný</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 58%;"></span></span>
+              <span class="persona-label right active">Zábavný</span>
+            </div>
+            <div class="persona-row">
+              <span class="persona-label active">Lidský</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 28%;"></span></span>
+              <span class="persona-label right">Technologický</span>
+            </div>
+            <div class="persona-row">
+              <span class="persona-label active">Přátelský</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 20%;"></span></span>
+              <span class="persona-label right">Autoritativní</span>
+            </div>
+            <div class="persona-row">
+              <span class="persona-label active">Mladý</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 36%;"></span></span>
+              <span class="persona-label right">Zralý</span>
+            </div>
+            <div class="persona-row">
+              <span class="persona-label">Formální</span>
+              <span class="persona-track"><span class="persona-mark" style="left: 65%;"></span></span>
+              <span class="persona-label right active">Neformální</span>
             </div>
           </div>
-          <div class="section-image reveal reveal-delay-2">
-            <img loading="lazy" src="images/pt-logos.png" alt="Logo Ptáček – varianty na barevných pozadích" />
+          <div class="section-body reveal reveal-delay-1" style="text-align: justify; margin-top: clamp(16px,2.3vw,30px); max-width: 1140px;">
+            <p>Klíčové rozhodnutí padlo hned na začátku: zachovat jelena. Komunita je hrdá na svůj domov a jelen je přímým odkazem na znak města Rychnov nad Kněžnou, kde se většina akcí odehrává. Historický znak zobrazuje dámu jedoucí na jelenovi. Tenhle motiv jsem nezahodil, jen ho přenesl do moderní podoby a rozhýbal.</p>
+          </div>
+          <div class="img-duo reveal reveal-delay-2" style="margin-top: clamp(20px, 3vw, 40px);">
+            <figure class="cap-item">
+              <figcaption class="img-caption">Znak města Rychnov nad Kněžnou</figcaption>
+              <div class="logo-board is-znak"><img loading="lazy" src="images/mt-znak.png" alt="Znak města Rychnov nad Kněžnou – dáma na jelenovi" /></div>
+            </figure>
+            <figure class="cap-item">
+              <figcaption class="img-caption">Nová ikona</figcaption>
+              <div class="logo-board is-znak"><img loading="lazy" src="images/mt-icon.svg" alt="Nová ikona Move Together – jelen s jezdkyní" /></div>
+            </figure>
           </div>
         </div>
 
         <!-- Fáze 3 -->
         <div class="layout-stacked reveal">
           <div class="section-text">
-            <h2 class="section-heading">Fáze 3 – Logika designu</h2>
+            <h2 class="section-heading">Fáze 3 – Nové logo</h2>
             <div class="section-body" style="text-align: justify;">
-              <p>Než začnu řešit vizuál, musím mít postavenou funkční kostru. Nejdřív jsem vytvořil informační architekturu, abychom dali všem textům a službám jasný řád. Tuto „mapu“ jsem následně načrtl na papír do prvních wireframů a ty pak převedl do interaktivního low-fidelity prototypu v Google Stitch. Díky tomu jsme si mohli hned na začátku otestovat celou uživatelskou cestu a ujistit se, že rezervace konzultace je na webu maximálně intuitivní.</p>
+              <p>Nové logo staví právě na pohybu. Siluetu jelena i jezdkyně jsem zjednodušil do ostrých, dynamických tahů, které vypadají, jako by se celý symbol právě odrážel do skoku. Z klidného heraldického výjevu se stal znak rychlosti, aniž by ztratil vazbu na původní příběh.</p>
             </div>
           </div>
-          <div class="img-duo reveal reveal-delay-1">
-            <img loading="lazy" src="images/pt-photo1.jpg" alt="Informační architektura – ruční náčrt" />
-            <img loading="lazy" src="images/pt-screen2.jpg" alt="Wireframy klíčových stránek webu" />
+          <div class="section-body reveal reveal-delay-1" style="text-align: justify; margin-top: clamp(16px,2.3vw,30px); max-width: 1140px;">
+            <p>Identitu tvoří tři varianty loga, aby fungovala v každé situaci: samostatná značka pro malé plochy a odznaky, horizontální lockup do hlaviček a patiček a vertikální lockup pro čtvercové formáty, jako jsou profilové fotky nebo dlaždice.</p>
           </div>
-
-          <div class="media-block">
-            <div class="section-body reveal" style="text-align: justify; max-width: 1140px;">
-              <p>Při návrhu obsahu webu jsme následně aplikovali brandovou identitu na unikátní storytelling, který propojuje tři Robinovy světy: exaktní vědu, vrcholový sport a hlubokou empatii. Do centra webové prezentace jsme umístili Robinův osobní příběh boje s váhou během pandemie. Tato volba nebyla náhodná – odhalená frustrace zbourala bariéru „nedostupného poradce“, zatímco následná cesta zpět podložená vzděláním, certifikáty a praxí vybudovala nezpochybnitelnou autoritu. Z poradenství se tak na webu stalo skutečné partnerství.</p>
-            </div>
-            <div class="img-duo reveal reveal-delay-1" style="margin-top: 0;">
-              <img loading="lazy" src="images/pt-screen3.jpg" alt="Sekce Moje filozofie a Vzdělání a odbornost" />
-              <img loading="lazy" src="images/pt-screen4.jpg" alt="Sekce Proč dělám to, co dělám – příběh" />
-            </div>
-
-            <!-- Skvělý design + foto -->
-            <div class="media-row reveal">
-              <img loading="lazy" src="images/pt-photo2.jpg" alt="Nové focení Robina pro web" />
-              <div class="media-text">
-                <p>Skvělý design by nefungoval bez kvalitních podkladů. Zorganizovali jsme proto zcela nové focení, aby vizuál konečně ladil s novou, dospělejší tváří značky. Snímky jsem pak upravil a detailně ořezal tak, aby perfektně zapadly do tmavého rozhraní webu. S novými fotografiemi šel návrh webu hladce. Cílem však nebylo vytvořit pouze pěknou vizitku, ale funkční nástroj, který vysvětluje, buduje autoritu a prodává.</p>
-              </div>
-            </div>
-
-            <!-- Navádění k akci (text only) -->
-            <div class="media-note reveal">
-              <h3 class="media-sub-heading">Navádění k akci (CTA):</h3>
-              <div class="media-text">
-                <p>Celý web je postavený na promyšlené uživatelské cestě. Strategicky rozmístěná a jasná CTA tlačítka uživatele nenechávají tápat, ale logicky ho vedou k jedinému cíli: sjednání konzultace.</p>
-              </div>
-            </div>
-
-            <!-- Social Proof + screenshot -->
-            <div class="media-row reveal">
-              <img loading="lazy" src="images/pt-screen5.jpg" alt="Sekce recenzí a transformací klientů" />
-              <div class="media-text">
-                <h3 class="media-sub-heading">Social Proof jako hlavní pilíř:</h3>
-                <p>Výživa je nesmírně citlivé téma, kde rozhoduje důvěra. Službu jsme proto detailně vysvětlili a podpořili reálnými důkazy. Navrhl jsem výrazné sekce s autentickými recenzemi a vizuálně čisté karty s transformacemi klientů. Z pohledu UX pro mě bylo klíčové doladit jejich responzivitu a interakci – na desktopu se dodatečné informace zobrazují plynule pomocí hover efektu (po přejetí myší), zatímco na mobilu a tabletu jsem karty přetvořil do intuitivního slideru přizpůsobeného pro swipování.</p>
-              </div>
-            </div>
-
-            <!-- Bento + screenshot (image right) -->
-            <div class="media-row reverse reveal">
-              <div class="media-text">
-                <h3 class="media-sub-heading">Bento design pro přednášky:</h3>
-                <p>Robin se nevěnuje jen 1-on-1 poradenství, ale i přednáškám. Tuto sekci jsem zpracoval do moderního bento gridu. Nabízí rychlý, vizuálně atraktivní přehled jeho aktivit, který je pro okamžité zvýšení kredibility podpořený logy organizací, se kterými již spolupracoval.</p>
-              </div>
-              <img loading="lazy" src="images/pt-screen6.jpg" alt="Bento grid sekce přednášek" />
-            </div>
+          <div class="logo-trio reveal reveal-delay-2">
+            <figure class="cap-item">
+              <figcaption class="img-caption">Ikona</figcaption>
+              <div class="logo-board is-icon"><img loading="lazy" src="images/mt-icon.svg" alt="Move Together – ikona, samostatná značka" /></div>
+            </figure>
+            <figure class="cap-item">
+              <figcaption class="img-caption">Vertikální</figcaption>
+              <div class="logo-board is-vertical"><img loading="lazy" src="images/mt-vertical.svg" alt="Move Together – vertikální lockup" /></div>
+            </figure>
+            <figure class="cap-item span-2">
+              <figcaption class="img-caption">Horizontální</figcaption>
+              <div class="logo-board is-horizontal"><img loading="lazy" src="images/mt-horizontal.svg" alt="Move Together – horizontální lockup" /></div>
+            </figure>
           </div>
         </div>
 
         <!-- Fáze 4 -->
         <div class="layout-stacked reveal">
           <div class="section-text">
-            <h2 class="section-heading">Fáze 4 – Ostrý vizuál</h2>
+            <h2 class="section-heading">Fáze 4 – Vizuální systém</h2>
+            <div class="section-body" style="text-align: justify;">
+              <p>Aby značka držela pohromadě, dostala pevný systém. Paletu tvoří čtyři odstíny. Evergreen a Soft Linen dávají identitě přírodní, klidný základ, Blaze Orange přidává energii a signální rychlost a Graphite celek pevně ukotví.</p>
+            </div>
+          </div>
+          <div class="swatches reveal reveal-delay-1">
+            <div class="swatch" style="background:#1a362d; color:#e9e1d8;">
+              <span class="hex">#1A362D</span>
+              <span class="name">Evergreen</span>
+            </div>
+            <div class="swatch" style="background:#e9e1d8; color:#2b2b2b;">
+              <span class="hex">#E9E1D8</span>
+              <span class="name">Soft Linen</span>
+            </div>
+            <div class="swatch" style="background:#ff5a00; color:#fff;">
+              <span class="hex">#FF5A00</span>
+              <span class="name">Blaze Orange</span>
+            </div>
+            <div class="swatch" style="background:#2b2b2b; color:#e9e1d8;">
+              <span class="hex">#2B2B2B</span>
+              <span class="name">Graphite</span>
+            </div>
+          </div>
+          <div class="section-body reveal reveal-delay-1" style="text-align: justify; margin-top: clamp(24px,3.5vw,50px); max-width: 1140px;">
+            <p>Hlavním písmem je Eurostile v řezu Bold Italic. Jeho technický, nakloněný charakter sám o sobě evokuje pohyb. Jeden detail jsem si upravil: písmeno R jsem naostřil, aby ladilo s hranatostí loga a značka měla vlastní rukopis.</p>
+          </div>
+          <div class="section-image reveal reveal-delay-1">
+            <img loading="lazy" src="images/mt-wordmark.png" alt="Move Together – wordmark v písmu Eurostile Bold Italic" />
+          </div>
+          <div class="section-body reveal reveal-delay-1" style="text-align: justify; margin-top: clamp(24px,3.5vw,50px); max-width: 1140px;">
+            <p>Doplňkovým prvkem je textura z vrstevnic Orlických hor, kam Move Together nejčastěji vyráží na túry. Reálné vrstevnice konkrétních míst jsem převedl do dynamické textury, takže i pozadí nese příběh terénu, ve kterém komunita žije.</p>
+          </div>
+          <div class="img-duo reveal reveal-delay-2" style="margin-top: clamp(20px, 3vw, 40px);">
+            <figure class="cap-item">
+              <figcaption class="img-caption">Mapa Orlických hor</figcaption>
+              <div class="cap-photo"><img loading="lazy" src="images/mt-map.jpg" alt="Vrstevnicová mapa Orlických hor – zdroj patternu" /></div>
+            </figure>
+            <figure class="cap-item">
+              <figcaption class="img-caption">Výsledný pattern</figcaption>
+              <div class="cap-photo"><img loading="lazy" src="images/mt-pattern.png" alt="Move Together – pattern z vrstevnic Orlických hor" /></div>
+            </figure>
+          </div>
+        </div>
+
+        <!-- Fáze 5 -->
+        <div class="layout-stacked reveal">
+          <div class="section-text">
+            <h2 class="section-heading">Fáze 5 – Identita v reálu</h2>
+            <div class="section-body" style="text-align: justify;">
+              <p>Nová identita nezůstala jen v prezentaci. Vyzkoušel jsem ji na všem, co komunita reálně používá, od dresů a lahví až po sociální sítě. Právě tady se ukázala síla systému. Ať jde o ražbu na termosce, potisk trička nebo profil na Instagramu, značka působí jednotně a sebevědomě.</p>
+            </div>
           </div>
         </div>
 
@@ -825,48 +929,61 @@
     <!-- ═══ Mockup gallery (full bleed) ═══ -->
     <section class="mockup-section">
       <div class="page">
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal1.jpg" alt="Ptáček – mockup webu 1" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal2.jpg" alt="Ptáček – mockup na MacBooku (tmavá verze)" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal3.jpg" alt="Ptáček – mockup na Mac Studiu (světlá verze)" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal4.jpg" alt="Ptáček – mockup na iPad Mini" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal5.jpg" alt="Ptáček – mockup na Dell monitoru" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal6.jpg" alt="Ptáček – mockup na MacBooku Pro" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal7.jpg" alt="Ptáček – mockup na MacBooku Pro na stole" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal8.jpg" alt="Ptáček – mockup stránky 404" /></div>
-        <div class="mockup-full reveal"><img loading="lazy" src="images/pt-gal9.jpg" alt="Ptáček – mockup detailu webu" /></div>
+        <div class="img-duo reveal" style="margin-top: 0;">
+          <img loading="lazy" src="images/mt-tshirt.jpg" alt="Move Together – tričko s vyšitým logem" />
+          <img loading="lazy" src="images/mt-shorts.jpg" alt="Move Together – běžecké šortky s logem" />
+        </div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/mt-watch.png" alt="Move Together – ikona na ciferníku Apple Watch" /></div>
+        <div class="img-duo reveal" style="margin-top: 0;">
+          <img loading="lazy" src="images/mt-cards.jpg" alt="Move Together – vizitky s patternem" />
+          <img loading="lazy" src="images/mt-bottle.jpg" alt="Move Together – termoska s ražbou loga" />
+        </div>
+        <div class="img-duo reveal" style="margin-top: 0;">
+          <img loading="lazy" src="images/mt-cup.png" alt="Move Together – kelímek s patternem" />
+          <img loading="lazy" src="images/mt-pouch.jpg" alt="Move Together – balení s logem" />
+        </div>
+        <div class="mockup-full reveal"><img loading="lazy" src="images/mt-instagram.jpg" alt="Move Together – značka v reálném prostředí" /></div>
+        <div class="brand-video is-reveal reveal" style="margin-top: 0;">
+          <video id="revealVideo" autoplay muted loop playsinline preload="metadata" poster="images/mt-logo-reveal-poster.png" aria-label="Animace sestavení loga Move Together">
+            <source src="images/mt-logo-reveal.mp4" type="video/mp4" />
+          </video>
+          <button type="button" class="video-toggle" id="revealVideoToggle" aria-label="Pozastavit video" aria-pressed="false">
+            <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+            <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
       </div>
     </section>
 
-    <!-- ═══ Porovnání: Původní web vs Nový redesign ═══ -->
+    <!-- ═══ Výsledek: Původní logo vs Nová identita ═══ -->
     <section class="compare-section">
+      <div class="result-intro reveal">
+        <h2 class="section-heading">Výsledek</h2>
+        <div class="section-body" style="text-align: justify;">
+          <p>Z nesourodého loga, které se rozpadalo v malých velikostech, se stala kompaktní a rozpoznatelná značka. Nová identita je čitelná i pár milimetrů velká, mluví jedním vizuálním jazykem a nese vlastní příběh: jelena z městského znaku rozběhnutého vpřed. Move Together má konečně identitu, která odpovídá tomu, čím komunita je: energická, hrdá na svůj kraj a otevřená všem, kdo se chtějí hýbat spolu.</p>
+        </div>
+      </div>
       <div class="compare-grid">
         <div class="reveal">
-          <h3 class="compare-title">PŮVODNÍ WEB</h3>
-          <ul class="compare-list compare-list--old">
-            <li><span class="ico ico-x" aria-hidden="true">✕</span>žádná jednotná vizuální identita</li>
-            <li><span class="ico ico-x" aria-hidden="true">✕</span>generické obrázky</li>
-            <li><span class="ico ico-x" aria-hidden="true">✕</span>uživatel neví jak služba probíhá, co má od Robina čekat</li>
-            <li><span class="ico ico-x" aria-hidden="true">✕</span>aby se uživatel objednal, musí vyplnit dotazník</li>
-            <li><span class="ico ico-x" aria-hidden="true">✕</span>generické reference, bez autentičnosti a storytellingu</li>
-            <li><span class="ico ico-x" aria-hidden="true">✕</span>plochý vizuál</li>
-            <li><span class="ico ico-x" aria-hidden="true">✕</span>velmi málo informací o Robinovi</li>
+          <h3 class="compare-title">PŮVODNÍ LOGO</h3>
+          <ul class="compare-list">
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>nesourodý mix výtvarných stylů</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>nečitelné v malých velikostech</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>žádné definované brand barvy</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>žádná zvolená typografie</li>
+            <li><span class="ico ico-x" aria-hidden="true">✕</span>bez jednotných pravidel</li>
           </ul>
         </div>
         <div class="reveal reveal-delay-1">
-          <h3 class="compare-title">NOVÝ REDESIGN</h3>
-          <ul class="compare-list compare-list--new">
-            <li><span class="ico ico-check" aria-hidden="true">✓</span>jednotná moderní vizuální identita</li>
-            <li><span class="ico ico-check" aria-hidden="true">✓</span>reálné fotky podporující storytelling</li>
-            <li><span class="ico ico-check" aria-hidden="true">✓</span>detailní popis Robinovy služby</li>
-            <li><span class="ico ico-check" aria-hidden="true">✓</span>propojený rezervační systém</li>
-            <li><span class="ico ico-check" aria-hidden="true">✓</span>skutečné příběhy proměn Robinových klientů</li>
-            <li><span class="ico ico-check" aria-hidden="true">✓</span>moderní vizuál s jasnou hierarchií</li>
-            <li><span class="ico ico-check" aria-hidden="true">✓</span>detailní popis Robinova příběhu a zkušeností</li>
+          <h3 class="compare-title">NOVÁ IDENTITA</h3>
+          <ul class="compare-list">
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>jednotný vizuální jazyk</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>čitelné i pár milimetrů velké</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>definovaná paleta čtyř barev</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>vlastní typografie s upraveným R</li>
+            <li><span class="ico ico-check" aria-hidden="true">✓</span>kompletní systém: logo, barvy, pattern</li>
           </ul>
         </div>
-      </div>
-      <div class="compare-cta reveal reveal-delay-1">
-        <a href="https://vyzivaptacek.cz/" class="btn-prototype" target="_blank" rel="noopener">Navštívit web</a>
       </div>
     </section>
 
@@ -884,11 +1001,11 @@
             <div class="card-type">UX/UI Design · Případová studie</div>
           </div>
         </a>
-        <a class="next-card reveal reveal-delay-2" href="movetogether.html">
-          <img loading="lazy" src="images/mt-card.png" alt="Move Together – případová studie" />
+        <a class="next-card reveal reveal-delay-2" href="ptacek.html">
+          <img loading="lazy" src="images/prace-card-ptacek.png" alt="Výživa Ptáček – případová studie" />
           <div class="card-overlay" aria-hidden="true">
-            <div class="card-name">Move Together</div>
-            <div class="card-type">Brand Design · Případová studie</div>
+            <div class="card-name">Výživa Ptáček</div>
+            <div class="card-type">UX/UI Design · Brand Design · Případová studie</div>
           </div>
         </a>
       </div>
@@ -929,24 +1046,58 @@
     const navOverlay = document.getElementById('navOverlay');
     const navClose   = document.getElementById('navClose');
 
+    const navFocusables = () => navOverlay.querySelectorAll('button, a[href]');
+
     function openNav() {
       navOverlay.classList.add('open');
       navOverlay.setAttribute('aria-hidden', 'false');
       menuBtn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
+      navClose.focus();
     }
     function closeNav() {
       navOverlay.classList.remove('open');
       navOverlay.setAttribute('aria-hidden', 'true');
       menuBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
+      menuBtn.focus();
     }
     menuBtn.addEventListener('click', openNav);
     navClose.addEventListener('click', closeNav);
     navOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && navOverlay.classList.contains('open')) closeNav();
+      if (!navOverlay.classList.contains('open')) return;
+      if (e.key === 'Escape') { closeNav(); return; }
+      if (e.key === 'Tab') {
+        const items = navFocusables();
+        if (!items.length) return;
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault(); last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault(); first.focus();
+        }
+      }
     });
+
+    /* ── Reveal video play/pause ── */
+    const revealVideo = document.getElementById('revealVideo');
+    const revealVideoToggle = document.getElementById('revealVideoToggle');
+    if (revealVideo && revealVideoToggle) {
+      const syncVideoToggle = () => {
+        const paused = revealVideo.paused;
+        revealVideoToggle.classList.toggle('is-paused', paused);
+        revealVideoToggle.setAttribute('aria-pressed', String(paused));
+        revealVideoToggle.setAttribute('aria-label', paused ? 'Přehrát video' : 'Pozastavit video');
+      };
+      revealVideoToggle.addEventListener('click', () => {
+        if (revealVideo.paused) { revealVideo.play(); } else { revealVideo.pause(); }
+        syncVideoToggle();
+      });
+      revealVideo.addEventListener('play', syncVideoToggle);
+      revealVideo.addEventListener('pause', syncVideoToggle);
+      syncVideoToggle();
+    }
 
     /* ── Scroll reveal ── */
     const observer = new IntersectionObserver((entries) => {
