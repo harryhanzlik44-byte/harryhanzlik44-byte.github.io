@@ -211,11 +211,13 @@
       flex-shrink: 0;
     }
     .section-body {
-      font-size: clamp(16px, 2.34vw, 30px);
+      font-size: clamp(15px, 2.05vw, 26px);
       font-weight: 400;
       color: #000;
-      letter-spacing: -0.9px;
-      line-height: 1.2;
+      letter-spacing: -0.6px;
+      line-height: 1.45;
+      text-align: left;
+      max-width: 68ch;
     }
     .section-body p + p { margin-top: 0.8em; }
 
@@ -236,7 +238,7 @@
       align-items: start;
     }
     .layout-side .section-text { display: contents; }
-    .layout-side .section-body { text-align: justify; }
+    .layout-side .section-body { text-align: left; }
     .layout-side .section-image,
     .layout-side .quotes { grid-column: 1 / -1; }
     .layout-side .extra-text { grid-column: 2; margin-top: 0; }
@@ -294,13 +296,13 @@
 
     /* Visual design extra text blocks */
     .extra-text {
-      font-size: clamp(16px, 2.34vw, 30px);
+      font-size: clamp(15px, 2.05vw, 26px);
       font-weight: 400;
       color: #000;
-      letter-spacing: -0.9px;
-      line-height: 1.2;
-      text-align: justify;
-      max-width: 838px;
+      letter-spacing: -0.6px;
+      line-height: 1.45;
+      text-align: left;
+      max-width: 68ch;
       margin-top: clamp(16px, 2.3vw, 30px);
     }
     .extra-text p + p { margin-top: 0.8em; }
@@ -706,7 +708,7 @@
         <div class="layout-side reveal">
           <div class="section-text">
             <h2 class="section-heading">Vizuální design</h2>
-            <div class="section-body" style="text-align: justify;">
+            <div class="section-body">
               <p>Zastaralý vzhled bylo potřeba nahradit něčím, co působí moderně, ale zachovává ikonickou červenou barvu Saunie. Vytvořil jsem interaktivní High-fidelity prototyp podložený komplexním Design Systémem. Zastaralý a plochý vizuál bylo potřeba nahradit něčím moderním, co aplikaci dodá prostor a hloubku, ale zároveň zachová ikonickou červenou barvu Saunie.</p>
             </div>
           </div>
@@ -791,7 +793,7 @@
       <div class="layout-stacked reveal">
         <div class="section-text">
           <h2 class="section-heading">Výsledek?</h2>
-          <div class="section-body" style="text-align: justify;">
+          <div class="section-body">
             <p>Původní ploché, textově přeplněné a matoucí rozhraní nahradil čistý, moderní design s jasnou vizuální hierarchií a hloubkou. Uživatelé už nemusí luštit skryté ceníky, hledat informace o ceremoniálech nebo zmateně tápat na recepci při uplatňování akcí.</p>
             <p>Všechny dříve postrádané funkce — od indikátoru aktuální obsazenosti pobočky přes snadné stažení zpětných účtenek až po praktický časovač odchodu — jsou nyní přirozenou součástí plynulého uživatelského toku. Výsledkem je aplikace, která návštěvníky nebrzdí, ale naopak jim od první vteřiny zpříjemňuje cestu za odpočinkem.</p>
           </div>

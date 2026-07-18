@@ -224,11 +224,13 @@
       flex-shrink: 0;
     }
     .section-body {
-      font-size: clamp(16px, 2.34vw, 30px);
+      font-size: clamp(15px, 2.05vw, 26px);
       font-weight: 400;
       color: #000;
-      letter-spacing: -0.9px;
-      line-height: 1.2;
+      letter-spacing: -0.6px;
+      line-height: 1.45;
+      text-align: left;
+      max-width: 68ch;
     }
     .section-body p + p { margin-top: 0.8em; }
 
@@ -249,7 +251,7 @@
       align-items: start;
     }
     .layout-side .section-text { display: contents; }
-    .layout-side .section-body { text-align: justify; }
+    .layout-side .section-body { text-align: left; }
     .layout-side .section-image,
     .layout-side .img-duo,
     .layout-side .palette,
@@ -354,7 +356,7 @@
       color: #000;
       letter-spacing: -0.5px;
       line-height: 1.45;
-      text-align: justify;
+      text-align: left;
     }
     .media-text p + p { margin-top: 0.7em; }
     /* text-only principle block */
@@ -695,7 +697,7 @@
         <div class="layout-stacked reveal">
           <div class="section-text">
             <h2 class="section-heading">Úvod</h2>
-            <div class="section-body" style="max-width: 846px; text-align: justify;">
+            <div class="section-body">
               <p>Všechno začalo dohodou na kompletním redesignu Robinových stávajících stránek. Robinův profesní růst natolik předehnal jeho původní web, že stávající prezentace začala jeho podnikání spíše brzdit. Naším cílem bylo vytvořit digitální identitu, která bude odpovídat expertovi 21. století.</p>
             </div>
           </div>
@@ -709,7 +711,7 @@
         <div class="layout-stacked reveal">
           <div class="section-text">
             <h2 class="section-heading">Fáze 1 – Objevování a strategie</h2>
-            <div class="section-body" style="text-align: justify;">
+            <div class="section-body">
               <p>Celý proces odstartovala hloubková konzultace, během které jsme definovali obchodní cíle, misi a především Robinova ideálního klienta. Zjistili jsme, že jím není profesionální sportovec, ale vytížený člověk hledající řád a energii. Tato strategická fáze byla klíčová, protože nám umožnila zcela opustit agresivní fitness klišé a postavit celou budoucí komunikaci na klidu, srozumitelnosti a vědecké racionalitě.</p>
             </div>
           </div>
@@ -719,7 +721,7 @@
         <div class="layout-stacked reveal">
           <div class="section-text">
             <h2 class="section-heading">Fáze 2 – Dospělá vizuální identita</h2>
-            <div class="section-body" style="text-align: justify;">
+            <div class="section-body">
               <p>S jasnou strategií v zádech jsme jako první krok vytvořili kompletní vizuální identitu a brand manuál, který se záměrně distancuje od oborových stereotypů. Naším cílem bylo vyhnout se „bio“ zelené barvě a motivům listů či salátů. Navrhli jsme moderní, minimalistické logo, kde ikonický symbol ptáčka plynule přechází do tvaru vidličky, čímž vznikl svébytný symbol moderní výživy.</p>
             </div>
           </div>
@@ -727,7 +729,7 @@
             <img loading="lazy" src="images/pt-ig1.jpg" alt="Vizitka Ptáček – brand mockup" />
             <img loading="lazy" src="images/pt-screen1.jpg" alt="Logo Ptáček – prezentace identity" />
           </div>
-          <div class="section-body reveal reveal-delay-1" style="text-align: justify; margin-top: clamp(16px,2.3vw,30px);">
+          <div class="section-body reveal reveal-delay-1" style="margin-top: clamp(16px,2.3vw,30px);">
             <p>Pro značku jsme definovali zemitou paletu postavenou na Temné břidlici a Mandlové, které evokují stabilitu a lidskost. Dynamiku a odkaz na sport jsme do manuálu vložili skrze akcenty Pálené mědi a Terakoty. Celý vizuální systém jsme ukotvili v sebevědomé typografii Montserrat a Inter. Tento radikální odklon od klišé okamžitě oddělil Robina od masy amatérských poradců a definoval ho jako dospělého a důvěryhodného partnera ještě předtím, než padl první pixel webu.</p>
           </div>
           <div class="palette reveal reveal-delay-2">
@@ -758,7 +760,7 @@
         <div class="layout-stacked reveal">
           <div class="section-text">
             <h2 class="section-heading">Fáze 3 – Logika designu</h2>
-            <div class="section-body" style="text-align: justify;">
+            <div class="section-body">
               <p>Než začnu řešit vizuál, musím mít postavenou funkční kostru. Nejdřív jsem vytvořil informační architekturu, abychom dali všem textům a službám jasný řád. Tuto „mapu“ jsem následně načrtl na papír do prvních wireframů a ty pak převedl do interaktivního low-fidelity prototypu v Google Stitch. Díky tomu jsme si mohli hned na začátku otestovat celou uživatelskou cestu a ujistit se, že rezervace konzultace je na webu maximálně intuitivní.</p>
             </div>
           </div>
@@ -768,7 +770,7 @@
           </div>
 
           <div class="media-block">
-            <div class="section-body reveal" style="text-align: justify; max-width: 1140px;">
+            <div class="section-body reveal" >
               <p>Při návrhu obsahu webu jsme následně aplikovali brandovou identitu na unikátní storytelling, který propojuje tři Robinovy světy: exaktní vědu, vrcholový sport a hlubokou empatii. Do centra webové prezentace jsme umístili Robinův osobní příběh boje s váhou během pandemie. Tato volba nebyla náhodná – odhalená frustrace zbourala bariéru „nedostupného poradce“, zatímco následná cesta zpět podložená vzděláním, certifikáty a praxí vybudovala nezpochybnitelnou autoritu. Z poradenství se tak na webu stalo skutečné partnerství.</p>
             </div>
             <div class="img-duo reveal reveal-delay-1" style="margin-top: 0;">
